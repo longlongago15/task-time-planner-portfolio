@@ -1,0 +1,20 @@
+.color-picker { min-width: 0; margin: 0; padding: 0; border: 0; display: grid; gap: 16px; color: var(--text-primary); }
+.color-picker legend { padding: 0; margin-bottom: 8px; font-size: 13px; font-weight: 600; }
+.color-presets { display: flex; flex-wrap: wrap; gap: 8px; padding: 4px; }
+.color-picker .color-swatch { width: 24px; height: 24px; min-height: 24px; padding: 0; border: 1px solid #0002; border-radius: 50%; font-weight: 700; line-height: 1; }
+.color-swatch[aria-pressed=true] { outline: 2px solid var(--text-primary); outline-offset: 2px; }
+.color-picker button:focus-visible, .color-picker input:focus-visible { outline: 2px solid var(--text-primary); outline-offset: 3px; }
+.color-picker-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 16px; }
+.color-picker .custom-color-label { display: flex; flex-direction: row; align-items: center; gap: 8px; font-size: 12px; cursor: pointer; }
+.app-layout .color-picker input[type=color] { width: 32px; height: 32px; min-height: 32px; padding: 2px; border: 1px solid var(--border-default); border-radius: 8px; background: var(--surface-panel); cursor: pointer; flex: 0 0 32px; }
+.app-layout .color-picker .custom-color-label { width: auto; display: flex; flex-direction: row; }
+.app-layout .color-picker .color-reset { font-size: 12px; padding: 4px 8px; }
+.color-preview { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 16px; min-height: 32px; }
+.project-color-preview { display: inline-flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; }
+.project-color-preview > span { overflow-wrap: anywhere; }
+.color-preview small { font-size: 11px; color: var(--text-muted); }
+.color-preview .tag-chip, .tag-picker-popup .tag-chip { border: 1px solid transparent; }
+.tag-management-row.tag-management-edit { display: grid; grid-template-columns: 1fr; gap: 16px; }
+.tag-management-edit > .tag-management-actions { display: flex; gap: 8px; }
+.tag-picker-popup:has(.tag-management-edit) .tag-picker-options { max-height: none; overflow: visible; }
+.tag-create-form > .tag-create-actions { display: flex; gap: 8px; }

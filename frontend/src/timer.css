@@ -1,0 +1,103 @@
+/* Imported last: Timer actions only. Navigation and general button tokens stay unchanged. */
+:root {
+  --timer-bg: #EEF2FF;
+  --timer-bg-hover: #E0E7FF;
+  --timer-bg-pressed: #C7D2FE;
+  --timer-bg-active: #4F46E5;
+  --timer-bg-active-hover: #4338CA;
+  --timer-icon: #4F46E5;
+  --timer-icon-active: #FFFFFF;
+  --timer-border: #C7D2FE;
+  --timer-bg-disabled: var(--surface-hover);
+  --timer-icon-disabled: var(--text-muted);
+}
+
+.app-layout.unified-shell :is(button.task-timer-button, button.timer-action-button, button.timer-text-action) {
+  --button-text: var(--timer-icon);
+  --button-bg: var(--timer-bg);
+  --button-border: var(--timer-border);
+  --button-hover-text: var(--timer-icon);
+  --button-hover-bg: var(--timer-bg-hover);
+  --button-active-text: var(--timer-icon);
+  --button-active-bg: var(--timer-bg-pressed);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--timer-icon);
+  background: var(--timer-bg);
+  border: 1px solid var(--timer-border);
+  border-radius: 8px;
+  box-shadow: none;
+  transition: background-color 100ms;
+}
+
+.app-layout.unified-shell button.task-timer-button {
+  width: 36px; min-width: 36px; height: 36px; min-height: 36px; padding: 0;
+}
+.app-layout.unified-shell button.task-timer-button[data-timer-size=sm] {
+  width: 24px; min-width: 0; height: 24px; min-height: 0;
+}
+/* Preserve the existing small Block bounds and floating hit/drag rules. */
+.app-layout.unified-shell :is(.calendar-schedule-chip, .calendar-event) button.calendar-task-start {
+  width: min(24px, calc(100% - 4px)); height: min(24px, calc(100% - 4px));
+}
+.app-layout.unified-shell .month-task-chip { position: relative; }
+.app-layout.unified-shell .month-task-chip button.task-timer-button { position: absolute; right: 2px; top: 0; opacity: 0; pointer-events: none; }
+.app-layout.unified-shell .month-task-chip:is(:hover, :focus-within) button.task-timer-button,
+.app-layout.unified-shell .month-task-chip:has([data-timer-state=pending]) button.task-timer-button { opacity: 1; pointer-events: auto; }
+/* A day containing real action Buttons uses a keyboard-equivalent day Trigger. */
+.app-layout.unified-shell .month-day[role=button] { border-color: var(--button-border); cursor: pointer; }
+.app-layout.unified-shell .month-day[role=button]:hover { --button-bg: var(--button-hover-bg); --button-text: var(--button-hover-text); border-color: var(--border-hover); }
+.app-layout.unified-shell .month-day[role=button]:active { --button-bg: var(--button-active-bg); --button-text: var(--button-active-text); }
+.app-layout.unified-shell .month-day[role=button]:focus-visible { outline: var(--focus-ring); outline-offset: -2px; }
+@media (hover: none) {
+  .app-layout.unified-shell .month-task-chip button.task-timer-button { opacity: 1; pointer-events: auto; }
+}
+.unified-shell.home-layout .workspace-sidebar .inbox-card-actions button.task-timer-button {
+  width: 32px; min-width: 32px; height: 32px; min-height: 32px;
+}
+.app-layout.unified-shell .task-list-unified-table .task-row-actions > button.task-timer-button {
+  flex: 0 0 36px; width: 36px; min-width: 36px; padding: 0; align-self: center;
+}
+@media (max-width: 600px) {
+  .app-layout.unified-shell .task-list-unified-table .task-row-actions > button.task-timer-button {
+    flex-basis: 24px; width: 24px; min-width: 24px; height: 24px; min-height: 24px;
+  }
+}
+
+.app-layout.unified-shell :is(button.task-timer-button, button.timer-action-button, button.timer-text-action):hover:not(:disabled) {
+  color: var(--timer-icon); background: var(--timer-bg-hover);
+}
+.app-layout.unified-shell :is(button.task-timer-button, button.timer-action-button, button.timer-text-action):active:not(:disabled) {
+  background: var(--timer-bg-pressed);
+}
+.app-layout.unified-shell :is(button.task-timer-button, button.timer-action-button, button.timer-text-action)[data-timer-state=active],
+.app-layout.unified-shell .global-top-timer button.timer-action-button[data-timer-state=default] {
+  color: var(--timer-icon-active); background: var(--timer-bg-active); border-color: var(--timer-bg-active);
+}
+.app-layout.unified-shell :is(button.task-timer-button, button.timer-action-button, button.timer-text-action)[data-timer-state=active]:is(:hover, :active):not(:disabled),
+.app-layout.unified-shell .global-top-timer button.timer-action-button[data-timer-state=default]:is(:hover, :active):not(:disabled) {
+  color: var(--timer-icon-active); background: var(--timer-bg-active-hover);
+}
+.app-layout.unified-shell :is(button.task-timer-button, button.timer-action-button, button.timer-text-action):disabled:not([data-timer-state=pending]) {
+  color: var(--timer-icon-disabled); background: var(--timer-bg-disabled); border-color: var(--border-default); opacity: 1; cursor: not-allowed;
+}
+.app-layout.unified-shell :is(button.task-timer-button, button.timer-action-button, button.timer-text-action)[data-timer-state=pending] {
+  color: var(--timer-icon); background: var(--timer-bg); border-color: var(--timer-border); opacity: 1; cursor: progress;
+}
+.app-layout.unified-shell :is(button.task-timer-button, button.timer-action-button, button.timer-text-action):focus-visible {
+  outline: var(--focus-ring); outline-offset: 2px;
+}
+.timer-action-icon { display: inline-flex; align-items: center; justify-content: center; pointer-events: none; }
+.timer-action-icon > .ui-icon { width: 18px; height: 18px; fill: currentColor; stroke: none; }
+.task-timer-button[data-timer-size=sm] .timer-action-icon > .ui-icon { width: 14px; height: 14px; }
+.timer-pending-indicator {
+  display: inline-block; width: 16px; height: 16px; box-sizing: border-box;
+  border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%;
+  animation: timer-pending-spin 800ms linear infinite; pointer-events: none;
+}
+@keyframes timer-pending-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .timer-pending-indicator { animation: none; }
+  .app-layout.unified-shell :is(button.task-timer-button, button.timer-action-button, button.timer-text-action) { transition: none; }
+}

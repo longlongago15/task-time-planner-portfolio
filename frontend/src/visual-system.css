@@ -1,0 +1,662 @@
+/* Shared shell geometry. Calendar time/pixel scales remain owned by Calendar. */
+:root {
+  --nav-rail-width: 48px;
+  --workspace-sidebar-width: 192px;
+  --main-padding: var(--spacing-lg);
+  --section-gap: var(--spacing-lg);
+}
+
+.app-layout.unified-shell {
+  --workspace-sidebar-space: var(--workspace-sidebar-width);
+  --home-rail: var(--nav-rail-width);
+  --home-sidebar: var(--workspace-sidebar-space);
+  display: grid;
+  grid-template-columns: var(--nav-rail-width) var(--workspace-sidebar-space) minmax(0, 1fr);
+  transition: grid-template-columns 180ms ease;
+}
+.app-layout.unified-shell.sidebar-collapsed { --workspace-sidebar-space: 0px; }
+.unified-shell.sidebar-collapsed > .workspace-sidebar { visibility: hidden; padding-inline: 0; border-right: 0; overflow: hidden; }
+.sidebar-heading { display: flex; align-items: center; justify-content: space-between; gap: 4px; min-height: 32px; }
+.unified-shell .sidebar-toggle { display: inline-flex; align-items: center; justify-content: center; width: 32px; min-width: 32px; height: 32px; min-height: 32px; padding: 0; border: 1px solid var(--border-default); border-radius: 8px; color: var(--text-secondary); background: var(--surface-panel); }
+.unified-shell .sidebar-toggle .ui-icon { width: 22px; height: 22px; stroke-width: 2; }
+.unified-shell .sidebar-toggle:hover { background: var(--surface-hover); border-color: var(--border-hover); }
+.unified-shell .sidebar-toggle:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+.unified-shell > .sidebar-toggle { position: fixed; z-index: 20; left: 8px; top: max(50dvh, 328px); transform: translateY(-50%); color: var(--text-on-emphasis); background: var(--surface-emphasis); border-color: transparent; }
+.unified-shell > .sidebar-toggle:hover { background: var(--color-accent-hover); }
+.unified-shell > .sidebar-toggle:focus-visible { outline-color: var(--on-primary); }
+.unified-shell > .icon-rail { grid-column: 1; grid-row: 1; width: var(--nav-rail-width); padding: var(--spacing-md) var(--spacing-xs); gap: var(--spacing-md); }
+.unified-shell .icon-rail :is(button, .brandmark) { width: var(--control-medium); min-width: var(--control-medium); height: var(--control-medium); }
+.unified-shell > .workspace-sidebar {
+  grid-column: 2; grid-row: 1; position: sticky; top: 0; display: flex; flex-direction: column;
+  width: var(--workspace-sidebar-space); min-width: 0; height: 100dvh; max-height: 100dvh; overflow-y: auto;
+  padding: var(--spacing-lg) var(--spacing-sm); gap: var(--spacing-md);
+  background: var(--surface-subtle); border-right: 1px solid var(--border-default); margin: 0;
+}
+.unified-shell .workspace-sidebar .sidebar-kicker { margin: 0; padding: 0 var(--spacing-sm); }
+.unified-shell .workspace-sidebar .sidebar-subnav { display: grid; gap: var(--spacing-sm); padding: 0; margin: 0; border: 0; }
+.unified-shell .workspace-sidebar .home-sidebar-section { padding: var(--spacing-md) 0 0; margin: 0; border: 0; border-top: 1px solid var(--border-default); background: transparent; border-radius: 0; }
+.unified-shell .workspace-sidebar .section-heading { display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-sm); padding: 0 var(--spacing-sm); margin: 0 0 var(--spacing-sm); }
+.unified-shell .workspace-sidebar .section-heading h2 { font-size: var(--font-caption); margin: 0; line-height: 20px; }
+.unified-shell .workspace-sidebar .section-heading button { width: var(--control-small); min-width: var(--control-small); height: var(--control-small); min-height: var(--control-small); padding: 0; }
+.unified-shell .workspace-sidebar :is(.sidebar-project-list, .sidebar-subnav) { gap: var(--spacing-sm); }
+.unified-shell .workspace-sidebar :is(.sidebar-project-list, .sidebar-subnav) button { justify-content: flex-start; width: 100%; min-height: var(--control-medium); padding: var(--spacing-sm); gap: var(--spacing-sm); }
+.unified-shell .workspace-sidebar button > .ui-icon { flex: 0 0 18px; }
+.unified-shell .workspace-sidebar button > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.unified-shell .workspace-sidebar .unplanned-list { gap: var(--spacing-sm); max-height: none; overflow: visible; }
+.unified-shell .workspace-sidebar .inbox-card-open { gap: var(--spacing-xs); padding: var(--spacing-sm); }
+.unified-shell .workspace-sidebar .inbox-card-open strong { padding-right: 0; }
+.unified-shell .workspace-sidebar .inbox-card-actions { position: absolute; top: auto; right: var(--spacing-sm); bottom: var(--spacing-sm); justify-content: flex-end; padding: 0; }
+.unified-shell .workspace-sidebar .inbox-card-times { padding-right: 88px; }
+.unified-shell .workspace-sidebar .inbox-card-actions button { width: var(--control-medium); min-width: var(--control-medium); height: var(--control-medium); min-height: var(--control-medium); }
+.unified-shell .inbox-card-project { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.unified-shell > .app-main { grid-column: 3; grid-row: 1; width: 100%; min-width: 0; max-width: none; padding: var(--spacing-lg) var(--main-padding) var(--spacing-xl); }
+.unified-shell .app-header { min-height: 0; align-content: start; align-items: flex-start; margin: 0 0 var(--section-gap); gap: var(--section-gap); }
+.unified-shell .app-header > .global-top-timer { align-self: flex-start; }
+.unified-shell .home-workspace { display: block; }
+.unified-shell .task-list-toolbar.panel { padding: var(--spacing-lg); border-radius: var(--base-radius); margin-bottom: var(--section-gap); }
+.unified-shell .panel.task-list-v43 { width: 100%; padding: var(--spacing-md); border: 0; border-radius: var(--base-radius); margin-bottom: var(--section-gap); box-shadow: inset 0 0 0 1px var(--border-default); max-width: none; }
+.unified-shell .task-result-count { padding: 0; margin: 0 0 8px; font-size: var(--font-caption); line-height: var(--line-height-body); color: var(--text-secondary); }
+.unified-shell .task-list-toolbar { gap: var(--spacing-md); }
+.unified-shell .project-grid { gap: var(--section-gap); }
+.unified-shell .project-card { border-radius: var(--base-radius); }
+.unified-shell .project-page-heading { margin-bottom: var(--section-gap); gap: var(--section-gap); }
+.unified-shell .project-summary { gap: var(--spacing-md); margin-bottom: var(--section-gap); }
+.unified-shell .project-tabs { margin-bottom: var(--section-gap); }
+
+/* A single column definition governs both the header and every shared TaskRow. */
+.task-list-v43 {
+  --task-status-column: 96px;
+  --task-name-column: minmax(240px, min(360px, calc(240px + (100% - var(--task-table-min-width)) * 0.5)));
+  --task-tags-column: minmax(160px, 1fr);
+  --task-project-column: minmax(160px, 1fr);
+  --task-priority-column: 96px;
+  --task-deadline-column: 128px;
+  --task-estimate-column: 104px;
+  --task-actual-column: 96px;
+  --task-actions-column: 40px;
+  --task-table-columns: var(--task-status-column) var(--task-name-column) var(--task-tags-column) var(--task-project-column) var(--task-priority-column) var(--task-deadline-column) var(--task-estimate-column) var(--task-actual-column) var(--task-actions-column);
+  --task-table-min-width: 1120px;
+}
+.task-list-project-context {
+  --task-table-columns: var(--task-status-column) var(--task-name-column) var(--task-tags-column) var(--task-priority-column) var(--task-deadline-column) var(--task-estimate-column) var(--task-actual-column) var(--task-actions-column);
+  --task-table-min-width: 960px;
+}
+.unified-shell .panel.task-list-v43 { overflow: visible; }
+.task-table-scroll { width: 100%; min-width: 0; overflow-x: auto; border-radius: var(--base-radius); }
+.task-table-scroll:focus-visible { outline: var(--focus-ring); outline-offset: var(--spacing-xs); }
+.unified-shell .task-list-v43 :is(.task-table-header, .task-table-row) {
+  grid-template-columns: var(--task-table-columns); min-width: var(--task-table-min-width);
+  width: 100%; gap: 0; padding: var(--spacing-sm) 0; margin: 0; align-items: center;
+}
+.unified-shell .task-list-v43 .task-list { display: block; margin: 0; padding: 0; }
+.unified-shell .task-list-v43 .task-table-row { min-height: 56px; }
+.unified-shell .task-list-v43 :is(.task-table-header, .task-table-row) > * { min-width: 0; padding-inline: 8px; box-sizing: border-box; }
+.unified-shell .task-list-v43 .task-table-status { position: relative; display: flex; align-items: center; justify-content: center; align-self: stretch; min-height: var(--control-medium); }
+.unified-shell .task-list-v43 .task-table-status > select.task-state { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; appearance: none; cursor: pointer; }
+.unified-shell .task-status-chip { display: inline-flex; align-items: center; justify-content: center; width: 100%; min-height: var(--control-small); padding: var(--spacing-xs) var(--spacing-sm); border-radius: 16px; font-size: var(--font-caption); font-weight: var(--weight-label); pointer-events: none; }
+.task-status-chip.todo { color: var(--text-secondary); background: var(--surface-subtle); }
+.task-status-chip.in-progress { color: var(--priority-low-text); background: var(--priority-low-bg); }
+.task-status-chip.done { color: var(--color-success); background: var(--surface-success); }
+.unified-shell .task-table-status:focus-within .task-status-chip { outline: var(--focus-ring); outline-offset: 2px; }
+.unified-shell .task-table-status:has(select:disabled) .task-status-chip { opacity: 0.5; }
+.unified-shell .task-list-v43 .task-table-header > :last-child,
+.unified-shell .task-list-v43 .task-table-row > .task-row-menu { padding-inline: 4px; }
+.unified-shell .task-list-v43 .task-table-header > span { display: flex; align-items: center; justify-content: center; text-align: center; min-height: var(--control-small); }
+.unified-shell .task-table-name .task-inline-value {
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2;
+  width: 100%; max-height: 40px; padding-block: 0; line-height: 20px; white-space: normal; overflow: hidden; overflow-wrap: anywhere; text-align: left;
+}
+.unified-shell .task-table-row select.task-state { min-height: var(--control-small); }
+.unified-shell .task-table-header { font-size: var(--font-table-header); font-weight: var(--weight-heading); }
+.unified-shell .task-table-row { line-height: var(--line-height-table); }
+.unified-shell .task-table-name strong { font-weight: var(--weight-label); }
+.unified-shell .task-table-number { text-align: right; }
+.unified-shell .task-table-number .task-inline-value { width: 100%; text-align: right; justify-content: flex-end; }
+.unified-shell .task-table-project .project-picker-trigger { width: 100%; padding: 4px; gap: var(--spacing-xs); border-color: transparent; background: transparent; }
+.unified-shell .task-table-project .project-picker-trigger > [data-icon=chevronDown] { display: none; }
+.unified-shell .task-table-project .project-picker-trigger:is(:hover, :focus-visible) { background: var(--surface-hover); }
+.unified-shell .task-table-project .project-picker-trigger:focus-visible { outline: var(--focus-ring); outline-offset: 0; }
+.unified-shell .task-table-project .project-picker-trigger > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.unified-shell .task-table-project .project-picker-trigger > .ui-icon { flex-shrink: 0; }
+.unified-shell .task-table-tags .tag-picker { width: 100%; }
+.tag-chips { display: flex; flex-wrap: nowrap; align-items: center; gap: var(--spacing-xs); width: 100%; min-width: 0; overflow: hidden; }
+.tag-chips > .tag-chip:not(.tag-overflow) { flex: 0 1 auto; min-width: 0; max-width: 100%; }
+.tag-chips > .tag-overflow { flex: 0 0 auto; white-space: nowrap; padding-inline: var(--spacing-xs); }
+.unified-shell .task-table-tags .tag-picker-trigger { gap: var(--spacing-xs); }
+.unified-shell .task-table-tags .tag-chip { padding: var(--spacing-xs); }
+.tag-chip[data-tag-color] { border: 1px solid; }
+.unified-shell .task-priority-pill { display: inline-flex; align-items: center; justify-content: center; width: 80px; min-width: 80px; min-height: var(--control-small); border: 0; border-radius: 8px; padding: var(--spacing-xs) var(--spacing-sm); font-weight: var(--weight-label); font-size: var(--font-caption); }
+.unified-shell .task-priority-pill.priority-high { background: var(--surface-danger); color: var(--color-danger); }
+.unified-shell .task-priority-pill.priority-medium { background: var(--surface-warning); color: var(--color-warning); }
+.unified-shell .task-priority-pill.priority-low { background: var(--surface-info); color: var(--color-info); }
+.unified-shell .task-priority-pill.priority-none { background: transparent; color: var(--text-secondary); }
+.unified-shell .task-priority-pill.priority-none:is(:hover, :focus-visible) { background: var(--surface-hover); }
+.unified-shell :is(button, summary).kebab-button {
+  --button-text: var(--text-secondary); --button-bg: transparent;
+  display: inline-flex; align-items: center; justify-content: center; flex: 0 0 var(--control-small);
+  width: var(--control-small); min-width: var(--control-small); height: var(--control-small); min-height: var(--control-small);
+  padding: 0; color: var(--text-secondary); background: transparent; border: 0; border-radius: var(--base-radius); opacity: 1; cursor: pointer;
+}
+.unified-shell .kebab-button:hover { background: var(--surface-hover); }
+.unified-shell .kebab-button:focus-visible { outline: var(--focus-ring); outline-offset: var(--spacing-xs); }
+.unified-shell .task-row-menu > summary { margin-inline: auto; }
+.unified-shell .task-filter-popover label { min-width: 0; }
+
+/* A date owns the full width of both lanes, across every calendar row. */
+.unified-shell .calendar-grid-content :is(.calendar-week-header > button, .calendar-week-metrics > div, .calendar-schedule-cell, .calendar-lane-header > div, .calendar-day-column) { border-left: 2px solid var(--border-strong); }
+.unified-shell .calendar-grid-content :is(.calendar-week-header > button, .calendar-week-metrics > div, .calendar-schedule-cell, .calendar-lane-header > div):nth-child(odd),
+.unified-shell .calendar-day-column:nth-child(even) { background-color: var(--surface-subtle); }
+.unified-shell .calendar-week-header:not(.calendar-lane-header) > button { border-bottom: 2px solid var(--border-strong); }
+.unified-shell .calendar-lane-header > div { padding-block: var(--spacing-xs); border-bottom: 1px solid var(--border-strong); }
+.unified-shell .calendar-lane-header > div > span + span { border-left: 1px solid var(--border-default); }
+.unified-shell .calendar-actual-lane { border-left: 1px solid var(--border-default); background: transparent; }
+.unified-shell .calendar-event.actual { border-left-style: solid; }
+
+/* Shared icon controls retain the same shell regardless of assigned metadata. */
+.unified-shell .timer-context-actions :is(.timer-project-trigger, .tag-picker-trigger) {
+  display: inline-flex; align-items: center; justify-content: center; flex: 0 0 32px;
+  width: 32px; min-width: 32px; height: 32px; min-height: 32px; padding: 0;
+  border: 1px solid var(--border-default); border-radius: 8px;
+  background: var(--surface-panel); color: var(--text-secondary);
+}
+.unified-shell .timer-context-actions :is(.timer-project-trigger, .tag-picker-trigger):hover:not(:disabled) { background: var(--surface-hover); border-color: var(--border-hover); }
+.unified-shell .timer-context-actions :is(.timer-project-trigger, .tag-picker-trigger):focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+.unified-shell .timer-context-actions .ui-icon { width: 18px; height: 18px; stroke-width: 2; }
+.unified-shell .icon-rail .nav-rail-icon { width: 22px; height: 22px; flex: none; }
+.unified-shell .icon-rail button { padding: 9px; border: 0; border-radius: 8px; color: var(--text-on-emphasis); background: transparent; }
+.unified-shell .icon-rail button.active { color: var(--on-primary); background: var(--color-accent); }
+.unified-shell .icon-rail button:hover:not(:disabled) { color: var(--on-primary); background: var(--color-accent-hover); }
+.unified-shell .icon-rail button:focus-visible { outline: 2px solid var(--on-primary); outline-offset: 2px; }
+.unified-shell .task-table-row select.task-state.todo { color: #475569; background: #F1F5F9; }
+.unified-shell .task-table-row select.task-state.in-progress { color: #1D4ED8; background: #EAF2FF; }
+.unified-shell .task-table-row select.task-state.done { color: #15803D; background: #EAF8EF; }
+.unified-shell :is(.task-priority-pill, .priority-option-label).priority-high { color: var(--priority-high-text); background: var(--priority-high-bg); }
+.unified-shell :is(.task-priority-pill, .priority-option-label).priority-medium { color: var(--priority-medium-text); background: var(--priority-medium-bg); }
+.unified-shell :is(.task-priority-pill, .priority-option-label).priority-low { color: var(--priority-low-text); background: var(--priority-low-bg); }
+.unified-shell .priority-option-label.priority-none { color: var(--text-secondary); background: var(--surface-hover); }
+.priority-picker { display: inline-block; }
+.unified-shell .priority-popup { position: fixed; z-index: 35; display: grid; gap: 4px; width: 160px; padding: 8px; background: var(--surface-panel); color: var(--text-primary); border: 1px solid var(--border-default); border-radius: 8px; box-shadow: 0 8px 24px #0002; }
+.unified-shell .priority-popup > button { display: flex; justify-content: space-between; align-items: center; width: 100%; min-height: 32px; padding: 4px 8px; background: transparent; color: var(--text-primary); border: 1px solid transparent; border-radius: 4px; }
+.unified-shell .priority-popup > button:is(:hover, [aria-checked=true]) { background: #F1F5F9; border-color: #CBD5E1; }
+.priority-option-label { display: inline-block; padding: 4px 8px; border-radius: 6px; font-size: 12px; }
+.priority-check { color: var(--text-secondary); }
+.task-priority-field, .task-deadline-field { display: grid; gap: 8px; min-width: 0; }
+.deadline-input { display: grid; gap: 8px; min-width: 0; }
+.deadline-input-controls { display: flex; gap: 8px; min-width: 0; }
+.deadline-input-controls > input { flex: 1; min-width: 0; width: 100%; }
+.unified-shell .deadline-calendar-trigger { display: inline-flex; align-items: center; justify-content: center; width: 32px; min-width: 32px; height: 32px; min-height: 32px; padding: 0; border: 1px solid var(--border-default); border-radius: 8px; background: var(--surface-panel); }
+.deadline-input-error { font-size: 12px; }
+.unified-shell .task-deadline-editor { width: 280px; max-width: calc(100vw - 16px); max-height: calc(100dvh - 16px); overflow-y: auto; }
+.deadline-calendar { display: grid; gap: 8px; padding: 8px; background: var(--surface-panel); border: 1px solid var(--border-default); border-radius: 8px; }
+.deadline-calendar-heading { display: flex; align-items: center; justify-content: space-between; }
+.unified-shell .deadline-calendar button { display: inline-flex; align-items: center; justify-content: center; height: 32px; min-height: 32px; padding: 4px; background: var(--surface-panel); border: 1px solid transparent; border-radius: 4px; color: var(--text-primary); }
+.unified-shell .deadline-calendar button:is(:hover, [aria-pressed=true]) { background: var(--surface-selected); border-color: var(--border-hover); }
+.deadline-calendar-days { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 0; text-align: center; }
+.deadline-calendar-days > small { padding-block: 4px; }
+
+@media (min-width: 601px) {
+  .unified-shell .task-filter-buttons .task-filter-anchor:nth-last-child(-n+2) .task-filter-popover { left: auto; right: 0; }
+}
+
+@media (max-width: 980px) and (min-width: 681px) {
+  .app-layout.unified-shell { --home-rail: 0px; grid-template-columns: var(--workspace-sidebar-space) minmax(0, 1fr); padding-bottom: 72px; }
+  .unified-shell > .icon-rail { display: none; }
+  .unified-shell > .workspace-sidebar { grid-column: 1; }
+  .unified-shell > .app-main { grid-column: 2; }
+  .unified-shell .project-heading-actions { flex-wrap: wrap; }
+  .unified-shell .project-page-heading { flex-wrap: wrap; }
+  .unified-shell .task-list-heading { flex-wrap: wrap; }
+}
+@media (max-width: 680px) {
+  .app-layout.unified-shell { display: block; padding-bottom: 72px; }
+  .unified-shell > :is(.icon-rail, .workspace-sidebar) { display: none; }
+  /* Home keeps its existing mobile unplanned cards, without desktop navigation. */
+  .unified-shell.home-layout > .workspace-sidebar { display: block; position: static; width: auto; height: auto; max-height: 320px; margin: 0 var(--spacing-md); padding: var(--spacing-md) 0; border: 0; overflow-y: auto; }
+  .unified-shell.home-layout { position: relative; display: flow-root; }
+  .unified-shell.home-layout > .workspace-sidebar { margin-top: calc(var(--control-large) + var(--spacing-xl) + var(--section-gap)); }
+  .unified-shell.home-layout .app-header { position: absolute; top: var(--spacing-md); left: var(--spacing-md); right: var(--spacing-md); margin: 0; }
+  .unified-shell.home-layout .workspace-sidebar > :is(.sidebar-heading, .sidebar-subnav, .workspace-projects) { display: none; }
+  .unified-shell .sidebar-toggle { display: none; }
+  .unified-shell .workspace-sidebar .unplanned-panel { border: 0; padding: 0; }
+  .unified-shell > .app-main { padding: var(--spacing-md); }
+  .unified-shell :is(.task-list-toolbar.panel, .panel.task-list-v43) { padding: var(--spacing-md); }
+  .unified-shell .project-heading-actions { flex-wrap: wrap; }
+}
+@media (min-width: 981px) {
+  .unified-shell.home-layout dialog.task-editor-panel { left: calc(var(--nav-rail-width) + var(--workspace-sidebar-space)); }
+}
+@media (prefers-reduced-motion: reduce) { .app-layout.unified-shell, .unified-shell > .app-main > .app-header { transition: none; } }
+@media (max-width: 600px) {
+  .unified-shell .task-list-v43 .task-table-header { display: none; }
+  .unified-shell .task-list-v43 .task-table-row { width: 100%; min-width: 0; grid-template-columns: 96px minmax(0, 1fr) 40px; gap: var(--spacing-md) 0; padding: var(--spacing-md) 0; }
+  /* Keep the existing 32px menu, 24px Timer and 8px Cell padding inside the Card. */
+  .unified-shell .task-list-v43.task-list-project-context .task-table-row { grid-template-columns: 96px minmax(0, 1fr) 72px; }
+  .unified-shell .task-list-v43 .task-table-row > [data-label] { grid-column: 1 / -1; }
+  .unified-shell .task-list-v43 .task-table-status { grid-column: 1; grid-row: 1; }
+  .unified-shell .task-table-number, .unified-shell .task-table-number .task-inline-value { text-align: left; justify-content: flex-start; }
+  .unified-shell .task-list-v43 .task-table-tags .tag-picker { flex: 1; min-width: 0; }
+  .unified-shell .task-list-v43 .task-table-name .task-inline-value { min-height: 40px; }
+}
+
+/* Home presentation; the existing Calendar geometry and interaction targets stay intact. */
+.nav-rail-label, .desktop-page-heading { display: none; }
+.home-layout .week-lane-header { display: none; }
+.home-layout .calendar-grid-content :is(.calendar-week-header > button, .calendar-week-metrics > div, .calendar-schedule-cell, .calendar-day-column).today {
+  background-color: color-mix(in srgb, var(--color-accent) 10%, var(--calendar-project-surface));
+}
+.home-layout .calendar-week-metrics > div { padding-inline: 0; }
+.home-layout .home-metrics.compact { gap: 0; }
+.home-layout .home-metrics.compact > div { grid-template-columns: minmax(0, 1fr); justify-content: stretch; justify-items: center; text-align: center; }
+.home-layout .home-metrics.compact > div + div { border-left: 1px solid var(--border-default); }
+.home-layout .calendar-page {
+  --calendar-project-tint: 28%;
+  --calendar-project-accent-strength: 80%;
+}
+[data-theme="dark"] .home-layout .calendar-page, .home-layout[data-theme="dark"] .calendar-page {
+  --calendar-project-tint: 28%;
+  --calendar-project-accent-strength: 25%;
+}
+.home-layout :is(.calendar-event, .calendar-schedule-chip, .month-task-chip) {
+  border-left-color: transparent !important; /* Retain border width and Block geometry. */
+}
+.home-layout .calendar-block-project {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.home-layout .weekly-schedule-event { gap: 0; }
+.home-layout .weekly-schedule-event > strong { line-height: 16px; }
+.home-layout .weekly-schedule-event > small { font-size: 11px; line-height: 12px; }
+.home-layout .weekly-schedule-event[data-density="medium"] { padding-block: 0; }
+.home-layout .weekly-schedule-event[data-density="medium"] .schedule-block-project { display: inline-flex; }
+.home-layout .weekly-schedule-event[data-density="short"] .schedule-block-duration { display: block; }
+.home-layout .weekly-schedule-event.calendar-event-compact .schedule-block-duration { display: none; }
+
+@media (min-width: 981px) {
+  .app-layout.unified-shell { --nav-rail-width: 64px; }
+  .app-layout.unified-shell:not(.home-layout) { --workspace-sidebar-space: 0px; }
+  .unified-shell:not(.home-layout) > :is(.workspace-sidebar, .sidebar-toggle) { display: none; }
+  .unified-shell > .icon-rail { padding-inline: 4px; gap: 8px; }
+  .app-layout.unified-shell > .icon-rail button { display: flex; flex-direction: column; gap: 4px; width: 56px; min-width: 56px; height: 56px; padding: 8px 0; }
+  .unified-shell .icon-rail .nav-rail-icon { width: 24px; height: 24px; }
+  .unified-shell .nav-rail-label { display: block; font-size: 9px; line-height: 12px; white-space: nowrap; }
+  .unified-shell .workspace-sidebar > :is(.sidebar-heading, .sidebar-subnav) { display: none; }
+  .unified-shell > .app-main { padding-top: 104px; }
+  .unified-shell .app-header {
+    box-sizing: border-box;
+    position: fixed; top: 0; left: var(--nav-rail-width); right: 0; width: auto; margin: 0;
+    border-bottom: 1px solid var(--border-default);
+    height: 80px; min-height: 80px; padding: 16px 24px; align-items: center; align-content: center;
+  }
+  .unified-shell .app-header > .page-heading-copy { display: none; }
+  .unified-shell .app-header > .global-top-timer { align-self: center; }
+  .unified-shell .desktop-page-heading { display: block; margin-bottom: 24px; }
+  .unified-shell .desktop-page-heading:empty { display: none; }
+  .unified-shell.home-layout > .workspace-sidebar { top: 80px; margin-top: 80px; height: calc(100dvh - 80px); max-height: calc(100dvh - 80px); padding-block: 16px; }
+  .unified-shell.home-layout .workspace-sidebar .unplanned-panel { padding-top: 0; border-top: 0; }
+  .unified-shell.home-layout .workspace-sidebar .inbox-card-open { gap: 0; padding: 8px; }
+  .unified-shell.home-layout .workspace-sidebar .inbox-card-open strong { font-size: 12px; line-height: 16px; }
+  .unified-shell.home-layout .workspace-sidebar .inbox-card-project { font-size: 11px; line-height: 16px; }
+  .unified-shell.home-layout .workspace-sidebar .inbox-card-times { padding-right: 72px; line-height: 32px; }
+  .unified-shell.home-layout .workspace-sidebar .inbox-card-actions { right: 8px; bottom: 8px; gap: 8px; }
+  .unified-shell.home-layout .workspace-sidebar .inbox-card-actions button { width: 32px; min-width: 32px; height: 32px; min-height: 32px; }
+}
+
+/* Final Home polish uses the existing interaction and scroll surfaces. */
+.home-layout .calendar-period-label { display: inline-flex; align-items: center; gap: 16px; }
+.home-layout .calendar-period-navigation { display: contents; }
+.home-layout .home-calendar-controls .calendar-period-controls .calendar-period-trigger { width: auto; min-width: 0; padding: 0 4px; background: transparent; border: 0; }
+.home-layout .home-calendar-controls > .home-calendar-display-controls { flex-basis: 100%; width: 100%; margin: 8px 0 0; }
+.home-layout .home-calendar-controls .calendar-comparison-switch { width: auto; }
+.home-layout .calendar-event { min-width: 0; grid-template-columns: minmax(0, 1fr); padding: 0 4px; gap: 0; }
+.home-layout .calendar-event > :is(strong, small) { min-width: 0; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-right: 0; margin-right: min(24px, 25%); }
+.home-layout .calendar-event > strong { font-weight: 700; line-height: 16px; }
+.home-layout .calendar-event > small { font-size: 11px; line-height: 12px; }
+.home-layout .calendar-event :is(.schedule-block-duration, .actual-block-duration) { color: var(--calendar-project-text); }
+.home-layout .schedule-block-tag-icon { position: absolute; right: 28px; top: 16px; display: flex; pointer-events: none; color: var(--calendar-project-text); }
+.home-layout .calendar-block-footer { display: flex; align-items: center; gap: 4px; min-width: 0; max-width: 100%; overflow: hidden; font-size: 11px; line-height: 12px; }
+.home-layout .calendar-block-footer > small { min-width: 0; padding: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: inherit; line-height: inherit; }
+.home-layout .calendar-block-footer .schedule-block-tag-icon { position: static; min-width: 0; flex: 0 1 12px; }
+.home-layout .calendar-event-compact .calendar-block-footer { display: none; }
+.home-layout .schedule-block-tag-icon .ui-icon { width: 12px; height: 12px; }
+.home-layout .calendar-schedule-chip .schedule-block-tag-icon { top: 4px; }
+.home-layout .month-task-chip { position: relative; min-width: 0; overflow: hidden; }
+.home-layout .month-task-chip .schedule-block-tag-icon { top: 4px; right: 4px; }
+.home-layout .month-task-chip:not([data-schedule-type="TIMED"]):has(.schedule-block-tag-icon) > strong { padding-right: 16px; }
+.home-layout .month-task-chip .calendar-block-footer { font-size: 12px; line-height: 16px; }
+.calendar-popover-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-block: 8px; }
+.unified-shell .timer-context-actions :is(.timer-project-trigger, .tag-picker-trigger):has(.timer-selection-label) { width: auto; max-width: 144px; flex-basis: auto; gap: 8px; padding-inline: 8px; }
+.unified-shell .timer-selection-label { display: block; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; }
+.unified-shell .timer-selection-label .tag-chip { display: block; min-width: 0; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.unified-shell .timer-selection-extra, .unified-shell .timer-context-actions .ui-icon { flex-shrink: 0; }
+.home-layout .calendar-loading-status { display: none; }
+
+@media (min-width: 981px) {
+  .unified-shell > .icon-rail { background: #153F3B; }
+  .unified-shell .icon-rail button { color: #DBEEEA; }
+  .unified-shell .icon-rail button.active { background: #D5EEEA; color: #16675E; }
+  .unified-shell .icon-rail button:hover:not(:disabled) { background: #E5F4F1; color: #16675E; }
+  .unified-shell .icon-rail button > :is(.nav-rail-label, .nav-rail-icon) { color: inherit; }
+  .unified-shell .global-top-timer .timer-context-actions :is(.timer-project-trigger, .tag-picker-trigger) { height: 48px; min-height: 48px; min-width: 48px; width: 48px; }
+  .unified-shell .global-top-timer .timer-context-actions :is(.timer-project-trigger, .tag-picker-trigger):has(.timer-selection-label) { width: auto; }
+  .unified-shell .global-top-timer .task-title-input input { font-weight: 600; }
+  .home-layout .desktop-page-heading { margin-bottom: 0; }
+  /* Fixed top rows and Timeline share horizontal scrolling, but only Timeline scrolls vertically. */
+  .home-layout > .app-main:has(.week-calendar-panel) { display: flex; flex-direction: column; height: 100dvh; }
+  .home-layout > .app-main > :is(.desktop-page-heading, .global-error) { flex-shrink: 0; }
+  .home-layout .home-workspace:has(.week-calendar-panel) { display: flex; flex-direction: column; align-items: stretch; flex: 1; min-height: 0; min-width: 0; }
+  .home-layout .calendar-page:has(.week-calendar-panel) { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+  .home-layout .calendar-page:has(.week-calendar-panel) > :is(.home-calendar-header, .home-calendar-display-controls) { flex-shrink: 0; }
+  .home-layout .home-calendar-layout { flex: 1; min-height: 0; min-width: 0; }
+  .home-layout .week-calendar-panel { display: flex; flex-direction: column; height: 100%; min-height: 0; margin-bottom: 0; }
+  .home-layout .calendar-schedule-status { flex-shrink: 0; }
+  .home-layout .calendar-grid-scroll { flex: 1; min-height: 0; }
+  .home-layout .calendar-grid-content { display: flex; flex-direction: column; height: 100%; }
+  .home-layout .calendar-grid-content > :is(.calendar-week-header, .calendar-week-metrics, .calendar-time-unset-row) { flex-shrink: 0; }
+  .home-layout .calendar-time-unset-row[data-expanded="true"] { max-height: 128px; grid-template-rows: max-content; overflow-y: auto; }
+  .home-layout .calendar-time-grid { flex: 1; min-height: 0; max-height: none; }
+  /* Day status keeps its existing slot; weekly updates use the Header gap. */
+  .unified-shell.home-layout > .app-main { padding: 96px 16px 16px; }
+  .home-layout .home-calendar-header { margin-bottom: 8px; }
+  .home-layout .home-calendar-header + .home-calendar-display-controls { margin-top: 0; }
+  .home-layout .home-calendar-display-controls { margin-bottom: 8px; }
+  .home-layout .week-calendar-panel { position: relative; border: 0; border-radius: 0; background: transparent; overflow: visible; }
+  .home-layout .week-calendar-panel .calendar-schedule-status { min-height: 24px; padding: 0; flex-wrap: nowrap; gap: 8px; }
+  .home-layout .week-calendar-panel.single-day .calendar-schedule-status { position: absolute; top: -40px; left: auto; right: 160px; max-width: calc(100% - 440px); }
+  .home-layout .calendar-update-status { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .home-layout .week-calendar-panel .calendar-schedule-status:has([role="alert"]) { position: static; max-width: none; flex-direction: row; flex-wrap: wrap; margin-bottom: 8px; }
+  .home-layout .calendar-grid-scroll { border-top: 1px solid var(--border-default); }
+  .home-layout .calendar-grid-content :is(.calendar-week-header > button, .calendar-week-metrics > div, .calendar-schedule-cell, .calendar-day-column):not(.today) { background-color: var(--calendar-project-surface); }
+  .home-layout .calendar-grid-content :is(.calendar-week-header > button, .calendar-week-metrics > div, .calendar-schedule-cell, .calendar-day-column) { border-left-color: var(--border-default); }
+  .home-layout :is(.calendar-actual-lane, .home-metrics.compact > div + div) { border-left-color: var(--grid-minor); }
+  .home-layout .calendar-page { --calendar-project-accent-strength: 60%; }
+  [data-theme="dark"] .home-layout .calendar-page, .home-layout[data-theme="dark"] .calendar-page { --calendar-project-accent-strength: 15%; }
+  .home-layout .calendar-event > strong { color: var(--calendar-project-text); font-weight: 800; }
+  .home-layout .calendar-event .calendar-block-project { font-weight: 600; }
+  .home-layout .month-task-chip[data-schedule-type="TIMED"] > strong { color: var(--calendar-project-text); font-weight: 800; }
+  .home-layout .month-task-chip[data-schedule-type="TIMED"] .calendar-block-project { font-weight: 600; }
+  .home-layout .calendar-block-footer > small { color: var(--calendar-project-text); font-weight: 700; }
+  /* Only presentation changes: existing controls and Block geometry are retained. */
+  .home-layout .calendar-event[data-density="full"] { padding-top: 8px; }
+  .home-layout .calendar-event[data-density="medium"] { padding-top: 4px; }
+  .home-layout .home-calendar-controls { flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 16px; }
+  .home-layout .home-calendar-controls > .calendar-navigation-controls { flex-shrink: 0; margin-right: auto; }
+  .home-layout .calendar-period-controls { align-items: center; gap: 8px; }
+  .home-layout .calendar-period-navigation[data-mode] { display: grid; grid-template-columns: 48px minmax(0, 1fr) 48px; width: 296px; height: 48px; box-sizing: border-box; border: 1px solid var(--border-default); border-radius: 8px; overflow: hidden; background: var(--surface-panel); }
+  .home-layout .calendar-period-navigation[data-mode] > button { width: 48px; min-width: 0; height: 100%; min-height: 0; padding: 0; border: 0; border-radius: 0; background: transparent; }
+  .home-layout .calendar-period-navigation[data-mode] > .calendar-period-label { min-width: 0; justify-content: center; margin: 0; border-inline: 1px solid var(--border-default); }
+  .home-layout .calendar-period-navigation[data-mode] > button.calendar-period-trigger { width: 100%; padding: 0; border-inline: 1px solid var(--border-default); color: var(--text-primary); }
+  .home-layout .calendar-period-trigger .calendar-period-label { min-width: 0; justify-content: center; margin: 0; }
+  .home-layout .calendar-period-navigation[data-mode] > button:hover { background: var(--surface-hover); }
+  .home-layout .calendar-period-controls .today-button { height: 48px; min-height: 48px; padding-inline: 8px; }
+  .home-layout .home-calendar-controls > .home-calendar-display-controls { flex-basis: auto; flex-shrink: 0; width: auto; min-height: 48px; margin: 0 0 0 auto; align-items: center; }
+  .home-layout .home-calendar-controls:has(.home-calendar-display-controls) > .calendar-mode-switch { margin-left: 0; }
+  .home-layout .home-calendar-controls .calendar-comparison-switch > button { flex: 0 0 auto; min-width: 128px; padding-inline: 16px; white-space: nowrap; }
+  .home-layout .home-calendar-controls .calendar-comparison-switch > button:last-child { min-width: 144px; }
+  .home-layout .home-calendar-controls .calendar-mode-switch { flex-shrink: 0; }
+  .home-layout .home-calendar-controls .calendar-comparison-switch { width: auto; margin-left: 0; }
+  /* Noninteractive weekly updates occupy the existing space above the Toolbar.
+     Keep the controls and Calendar in flow, and leave room for their Focus outline. */
+  .home-layout .home-calendar-header:has(> .calendar-loading-status) { position: relative; }
+  .home-layout .calendar-loading-status { display: flex; position: absolute; inset-block-end: calc(100% + 2px); inset-inline-end: 0; max-width: 100%; gap: var(--space-2); color: var(--text-secondary); font-size: var(--font-caption); line-height: 1; pointer-events: none; }
+  .home-layout .calendar-loading-status > .calendar-update-status { flex: 0 0 auto; overflow: visible; }
+  .home-layout .week-calendar-panel:not(.single-day) .calendar-schedule-status:not(:has([role="alert"])) { display: none; }
+  .home-layout .week-calendar-panel:not(.single-day) .calendar-schedule-status > .calendar-update-status { display: none; }
+  /* An invisible update placeholder must not cover Toolbar controls. Error/retry content stays interactive. */
+  .home-layout .week-calendar-panel .calendar-schedule-status:has(> .calendar-update-status.is-idle:only-child) { pointer-events: none; }
+}
+
+/* One shared Picker surface; only its selection grid varies by mode. */
+.unified-shell:is(.home-layout, [data-page="reports"]) .calendar-navigation-picker { width: 320px; max-width: calc(100vw - 16px); max-height: calc(100dvh - 16px); padding: 16px; overflow: auto; border: 1px solid var(--border-default); border-radius: 8px; box-shadow: 0 8px 24px #0002; background: var(--surface-panel); color: var(--text-primary); }
+.calendar-picker-header { display: grid; grid-template-columns: 32px minmax(0, 1fr) 32px 32px; align-items: center; gap: 8px; margin-bottom: 8px; }
+.calendar-picker-header strong { text-align: center; font-size: 14px; }
+.unified-shell:is(.home-layout, [data-page="reports"]) .calendar-picker-header button { width: 32px; min-width: 32px; height: 32px; min-height: 32px; padding: 0; display: grid; place-items: center; }
+.calendar-picker-weekdays, .calendar-picker-days { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); }
+.calendar-picker-weekdays.with-week-number, .calendar-picker-weeks > button { grid-template-columns: 40px repeat(7, minmax(0, 1fr)); }
+.calendar-picker-weekdays > span { text-align: center; font-size: 12px; line-height: 32px; color: var(--text-secondary); }
+.calendar-picker-months { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.unified-shell:is(.home-layout, [data-page="reports"]) :is(.calendar-picker-days, .calendar-picker-months, .calendar-picker-weeks) > button { min-width: 0; height: 40px; min-height: 40px; padding: 0; border: 0; border-radius: 8px; background: transparent; color: var(--text-primary); font-size: 14px; }
+.unified-shell:is(.home-layout, [data-page="reports"]) .calendar-picker-weeks > button { display: grid; align-items: center; width: 100%; }
+.calendar-picker-weeks > button > span { min-width: 0; text-align: center; line-height: 32px; }
+.unified-shell:is(.home-layout, [data-page="reports"]) .calendar-navigation-picker .other-month { color: var(--text-secondary); }
+.unified-shell:is(.home-layout, [data-page="reports"]) :is(.calendar-picker-days, .calendar-picker-months, .calendar-picker-weeks) > button:hover { background: var(--surface-hover); }
+.unified-shell:is(.home-layout, [data-page="reports"]) :is(.calendar-picker-days, .calendar-picker-months, .calendar-picker-weeks) > button[aria-pressed="true"] { background: var(--surface-selected); color: var(--text-primary); font-weight: 700; }
+.calendar-navigation-picker [aria-current="date"] { box-shadow: inset 0 0 0 1px var(--color-accent); border-radius: 8px; }
+.calendar-navigation-picker button:focus-visible { outline: var(--focus-ring); outline-offset: -2px; }
+.home-layout .calendar-time-unset-row > .calendar-row-gutter { position: sticky; top: 0; align-self: start; z-index: 2; background: var(--surface-subtle); }
+@media (min-width: 981px) and (max-width: 1200px) {
+  .home-layout .home-calendar-controls { gap: 8px; }
+  .home-layout .calendar-period-navigation[data-mode] { grid-template-columns: 32px minmax(0, 1fr) 32px; width: 208px; }
+  .home-layout .calendar-period-navigation[data-mode] > button { width: 32px; }
+  .home-layout .home-calendar-controls > .calendar-mode-switch > button { width: 32px; min-width: 32px; padding-inline: 0; }
+  .home-layout .home-calendar-controls > .calendar-mode-switch { width: auto; }
+}
+/* Keep the Mode origin independent of the period label at Tablet/Mobile widths.
+   The period itself stays together; Mode/Today can wrap within the available row. */
+@media (max-width: 980px) {
+  .home-layout .home-calendar-controls .calendar-period-controls { max-width: 100%; flex-wrap: wrap; }
+  .home-layout .calendar-period-navigation[data-mode] { display: flex; flex: 0 0 232px; align-items: center; gap: 4px; }
+  .home-layout .calendar-period-navigation[data-mode] > button:not(.calendar-period-trigger) { flex: 0 0 40px; }
+  .home-layout .home-calendar-controls .calendar-period-controls .calendar-period-trigger { flex: 1; width: 0; }
+  .home-layout .calendar-period-trigger .calendar-period-label { min-width: 0; }
+}
+@media (max-width: 980px) {
+  .unified-shell .timer-selection-empty { display: none; }
+  .unified-shell .timer-context-actions :is(.timer-project-trigger, .tag-picker-trigger):has(.timer-selection-empty) { width: 32px; flex-basis: 32px; padding: 0; }
+  .unified-shell .timer-context-actions :is(.timer-project-trigger, .tag-picker-trigger):has(.timer-selection-label) { max-width: 96px; gap: 4px; padding-inline: 4px; }
+}
+@media (max-width: 680px) {
+  .unified-shell .timer-context-actions :is(.timer-project-trigger, .tag-picker-trigger):has(.timer-selection-label) { max-width: clamp(32px, calc((100vw - 248px) / 2), 64px); }
+}
+
+/* Task Editor rows share only presentation; existing controls own their state. */
+dialog.task-editor-panel { scrollbar-gutter: stable; }
+.task-editor-panel .task-attribute-row { display: grid; gap: 8px; min-width: 0; }
+.task-editor-panel .task-attribute-icon { display: none; }
+.task-editor-panel .task-attribute-control { min-width: 0; }
+.task-editor-panel .task-attribute-control :is(.project-picker, .tag-picker, .date-input) { width: 100%; }
+.task-editor-panel:where(:not(.shared-full-editor)) .task-attribute-control :is(.project-picker-trigger, .tag-picker-trigger) { width: 100%; }
+.task-editor-panel:not(.shared-full-editor) .task-priority-pill.priority-none:not(:has(.ui-icon))::before { content: '未設定'; }
+@media (min-width: 981px) {
+  .task-editor-panel .task-attribute-row { grid-template-columns: 24px 88px minmax(0, 1fr); align-items: center; gap: 8px; }
+  .task-editor-panel .task-attribute-icon { display: flex; align-items: center; justify-content: center; color: var(--text-secondary); }
+  .task-editor-panel .task-attribute-label { font-size: 14px; white-space: nowrap; }
+  .task-editor-panel:where(:not(.shared-full-editor)) .task-attribute-control :is(input:not([type=checkbox]):not([type=hidden]), .project-picker-trigger, .tag-picker-trigger, .task-priority-pill) { min-height: 40px; }
+}
+
+/* Shared Task input presentation; each surface retains its own save state. */
+.task-status-control { position: relative; display: inline-flex; flex: none; max-width: 100%; align-items: center; }
+.task-status-control .task-status-chip { display: inline-flex; align-items: center; justify-content: center; gap: 4px; width: auto; min-height: 32px; padding: 4px 8px; border-radius: 16px; font-size: var(--font-caption); font-weight: var(--weight-label); white-space: nowrap; pointer-events: none; }
+.task-status-control > select { position: absolute; inset: 0; width: 100%; height: 100%; min-height: 0; opacity: 0; cursor: pointer; }
+.task-status-control:has(select:focus-visible) .task-status-chip { outline: var(--focus-ring); outline-offset: 2px; }
+.task-status-control:has(select:disabled) { opacity: .6; }
+.task-status-control > .error { position: absolute; top: 100%; left: 0; min-width: 160px; background: var(--surface-panel); z-index: 1; }
+.task-name-section { display: grid; gap: 8px; min-width: 0; }
+.task-name-label { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.task-name-label > label { margin: 0; }
+.task-attribute-form .task-attribute-control { min-width: 0; }
+.task-attribute-form .task-attribute-control :is(.project-picker, .tag-picker, .priority-picker, .date-input, .task-detail-field-editor) { display: block; width: 100%; min-width: 0; }
+.task-attribute-form:where(:not(.shared-full-editor)) .task-attribute-control :is(input:not([type=checkbox]):not([type=hidden]), .project-picker-trigger, .tag-picker-trigger, .task-priority-pill, .task-inline-value, .task-title-input > button) {
+  width: 100%; min-width: 0; min-height: 40px; box-sizing: border-box; padding: 8px;
+  border: 1px solid var(--border-default); border-radius: 8px; background: var(--surface-subtle); color: var(--text-primary); font-size: var(--font-body); text-align: left;
+}
+.task-attribute-form .task-attribute-control :is(.project-picker-trigger, .tag-picker-trigger, .task-priority-pill) { justify-content: flex-start; }
+.task-attribute-form :is(.project-picker-trigger, .task-priority-pill) > span { min-width: 0; flex: 1; overflow: hidden; text-overflow: ellipsis; }
+.task-attribute-form:where(:not(.shared-full-editor)) .task-attribute-control .tag-picker-trigger { height: auto; padding-block: 4px; }
+.task-attribute-form .tag-picker-trigger > .tag-chips { flex: 1; min-width: 0; flex-wrap: wrap; }
+.task-attribute-form :is(.tag-picker-trigger, .task-priority-pill) > .ui-icon { flex: none; margin-left: auto; }
+.task-attribute-form .tag-picker-options input[type=checkbox] { min-height: 16px; padding: 0; }
+.task-attribute-form:where(:not(.shared-full-editor)) .task-attribute-control :is(input, button):hover:not(:disabled) { border-color: var(--border-hover); }
+.task-attribute-form:where(:not(.shared-full-editor)) .task-attribute-control :is(input, button):focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+.task-attribute-form .task-attribute-control :is(input, button):disabled { color: var(--text-muted); background: var(--surface-hover); cursor: default; }
+.task-attribute-form .task-attribute-control .deadline-calendar-trigger { height: 40px; min-height: 40px; }
+.task-editor-panel:not(.shared-full-editor) .task-priority-pill.priority-high > span { color: var(--priority-high-text); }
+.task-editor-panel:not(.shared-full-editor) .task-priority-pill.priority-medium > span { color: var(--priority-medium-text); }
+.task-editor-panel:not(.shared-full-editor) .task-priority-pill.priority-low > span { color: var(--priority-low-text); }
+/* Unset values share one text color; selected semantic colors remain separate. */
+.task-list-unified-table .task-table-number[data-unset="true"] .task-inline-value,
+.task-list-unified-table .deadline-none .task-inline-value,
+.unset-value,
+.tag-empty,
+.task-priority-pill.priority-none > span,
+.task-editor-panel:not(.shared-full-editor) .task-priority-pill.priority-none:not(:has(.ui-icon))::before,
+.task-attribute-form .task-attribute-row input::placeholder,
+.task-attribute-form .task-attribute-row[data-unset="true"] :is(.project-picker-trigger, .task-priority-pill),
+.task-attribute-form .task-attribute-row[data-unset="true"] :is(.task-inline-value, input[type="time"], .time-input input) { color: var(--text-secondary); }
+.task-attribute-form .task-attribute-row input::placeholder { opacity: 1; }
+.task-detail .task-attribute-row { display: grid; grid-template-columns: 24px 72px minmax(0, 1fr); gap: 8px; align-items: center; min-width: 0; }
+.task-detail .task-attribute-icon { display: flex; align-items: center; justify-content: center; color: var(--text-secondary); }
+.task-detail .task-attribute-label { font-size: 14px; }
+.task-detail > .task-attribute-row { margin-block: 8px; }
+.task-detail .task-attribute-control h2 { margin: 0; font-size: var(--font-body); min-width: 0; }
+.task-detail .task-title-input > button { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; white-space: normal; overflow-wrap: anywhere; }
+.task-detail .calendar-popover-project, .task-detail .calendar-popover-tags { margin: 0; }
+.task-detail-top-row, .task-detail-top-actions { display: flex; align-items: center; gap: 8px; }
+.task-detail-top-row { justify-content: space-between; margin-bottom: 16px; }
+.app-layout .task-detail-close { width: 40px; min-width: 40px; height: 40px; padding: 0; }
+.app-layout button.task-timer-always { position: static; opacity: 1; visibility: visible; width: 40px; height: 40px; padding: 0; }
+.task-attribute-form .composer-footer { flex-wrap: wrap; gap: 8px; }
+.task-time-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 8px 0; }
+.task-time-summary > div { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr; gap: 4px; min-width: 0; text-align: center; }
+.task-time-summary dt { color: var(--text-secondary); font-size: var(--font-caption); }
+.task-time-summary dd { margin: 0; text-align: center; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.task-time-summary strong { font-size: var(--font-body); }
+.task-attribute-form .task-time-summary :is(dd > strong, dd > button) { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; min-height: 40px; padding: 4px 8px; border: 0; border-radius: 8px; background: var(--surface-subtle); }
+.unified-shell.home-layout .workspace-sidebar .inbox-card-open { padding: 4px 8px; gap: 0; }
+.home-layout .inbox-card-open > .task-status-control { justify-self: start; margin-bottom: 4px; }
+.home-layout .inbox-card-open > .task-status-control .task-status-chip { min-height: 16px; padding: 0 8px; line-height: 16px; }
+.inbox-card-title { display: flex; align-items: flex-start; gap: 8px; min-width: 0; }
+.inbox-card-title > strong { flex: 1; min-width: 0; }
+.unified-shell.home-layout .workspace-sidebar .inbox-card-title > strong { line-height: 20px; }
+.unified-shell.home-layout .workspace-sidebar .inbox-card-actions { top: 4px; right: 8px; bottom: auto; pointer-events: none; }
+.home-layout .inbox-task-card:is(:hover, :focus-within) .inbox-card-actions { pointer-events: auto; }
+.unified-shell.home-layout .workspace-sidebar .inbox-card-actions button { width: 32px; min-width: 32px; height: 32px; min-height: 32px; }
+.unified-shell.home-layout .workspace-sidebar .inbox-task-card:is(:hover, :focus-within) .inbox-card-title { padding-right: 40px; }
+.unified-shell.home-layout .workspace-sidebar .inbox-card-times { padding-right: 0; line-height: 16px; }
+.unified-shell.home-layout .workspace-sidebar .inbox-card-times b { font-size: 12px; line-height: 16px; }
+@media (hover: none) {
+  .unified-shell.home-layout .workspace-sidebar .inbox-card-actions { pointer-events: auto; }
+  .unified-shell.home-layout .workspace-sidebar .inbox-card-title { padding-right: 40px; }
+}
+.home-layout .task-project-tags { display: flex; align-items: center; gap: 4px; min-width: 0; max-width: 100%; overflow: hidden; font-size: 11px; line-height: 12px; }
+.home-layout .task-project-tags:empty { display: none; }
+.home-layout .task-project-value { display: inline-flex; align-items: center; flex: 0 1 auto; min-width: 0; overflow: hidden; white-space: nowrap; }
+.home-layout .task-project-value > .ui-icon { flex: none; width: 12px; height: 12px; margin-right: 4px; }
+.home-layout .task-project-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.home-layout .task-project-tags .schedule-block-tag-icon { position: static; flex: none; }
+.home-layout .calendar-event > .task-project-tags { margin-right: 0; }
+.home-layout .calendar-event[data-density="short"] > .task-project-tags { display: none; }
+.home-layout .inbox-task-card .task-project-tags { font-size: 11px; line-height: 16px; }
+.task-list-unified .task-counts { margin: 0; }
+.unified-shell .task-list-toolbar.panel.task-list-unified { margin-bottom: 8px; padding-bottom: 16px; }
+.task-list-unified .task-filter-area { display: flex; flex-direction: column; gap: 8px; }
+.task-list-unified .task-filter-sort-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+.task-list-unified .task-filter-buttons { min-width: 0; flex-wrap: wrap; }
+.task-list-unified .task-sort-controls { margin-left: auto; flex: none; flex-wrap: wrap; }
+.task-applied-filter-chips { display: contents; }
+.task-list-unified .task-applied-filters { flex-wrap: nowrap; margin-top: 0; gap: 8px; }
+.task-list-unified .task-applied-filter-chips { display: flex; flex: 1; min-width: 0; align-items: center; gap: 8px; flex-wrap: wrap; }
+.task-list-unified .task-clear-all { flex: none; margin-left: 0; white-space: nowrap; }
+.task-list-unified .task-filter-chip { max-width: 100%; box-sizing: border-box; }
+.task-list-unified .task-filter-project-value { display: inline-flex; align-items: center; gap: 4px; min-width: 0; overflow-wrap: anywhere; }
+.unified-shell .task-list-unified-table .task-table-name { align-self: stretch; display: flex; }
+.unified-shell .task-list-unified-table .task-table-name > strong { display: flex; width: calc(100% + 16px); margin-inline: -8px; flex: none; min-width: 0; }
+.unified-shell .task-list-unified-table .task-table-name .task-title-input { display: flex; flex-direction: column; width: 100%; height: 100%; min-width: 0; }
+.unified-shell .task-list-unified-table .task-table-name .task-title-input > button {
+  width: 100%; padding-inline: 8px;
+  max-height: none; height: 100%; flex: none; cursor: pointer; font: inherit; color: inherit;
+}
+.unified-shell .task-list-unified-table .task-table-name .task-title-input > input { width: 100%; height: 32px; box-sizing: border-box; padding-inline: 8px; }
+.task-list-unified-table .task-table-name .task-title-input > button:hover { background: var(--surface-hover); }
+.task-list-unified-table .tag-picker-trigger > [data-icon=chevronDown],
+.task-list-unified-table .project-picker-trigger > .unset-value,
+.task-list-unified-table .project-picker-trigger:has(> .unset-value) > [data-icon=folder] { display: none; }
+.unified-shell .task-list-unified-table .task-table-tags .tag-picker-trigger:has(.tag-empty) { width: 100%; min-height: 32px; }
+/* Existing controls own the hit area; their compact visual content is unchanged. */
+.unified-shell .task-list-unified-table .task-table-row > :is(.task-table-status, .task-table-tags, .task-table-project, .task-table-priority, .task-table-deadline, .task-table-number, .task-row-menu) {
+  position: relative; align-self: stretch; display: flex; align-items: center;
+}
+.task-list-unified-table .task-table-status .task-status-control { position: static; }
+.task-list-unified-table .task-inline-estimate { position: static; }
+.task-list-unified-table .task-table-status .task-status-control > select { cursor: pointer; }
+.unified-shell .task-list-unified-table .task-table-row :is(.tag-picker-trigger, .project-picker-trigger, .task-priority-pill, .task-table-deadline > button, .task-inline-estimate > button, .task-row-menu > summary) { position: static; }
+.task-list-unified-table .task-table-row :is(.tag-picker-trigger, .project-picker-trigger, .task-priority-pill, .task-table-deadline > button, .task-inline-estimate > button, .task-row-menu > summary)::after {
+  content: ''; position: absolute; inset: 0; cursor: pointer;
+}
+.task-list-unified-table .task-table-row:hover { background: var(--surface-hover); }
+.unified-shell .task-list-unified-table .task-row-menu > summary { justify-content: flex-start; }
+.task-list-unified .task-filter-status-chip { padding: 0; border: 0; background: transparent; gap: 0; }
+.task-list-unified .task-filter-status-chip > button { margin-left: -4px; padding: 4px 8px 4px 4px; border-radius: 0 16px 16px 0; }
+.task-list-unified .task-filter-status-chip:has(.todo) > button { color: var(--text-secondary); background: var(--surface-subtle); }
+.task-list-unified .task-filter-status-chip:has(.in-progress) > button { color: var(--priority-low-text); background: var(--priority-low-bg); }
+.task-list-unified .task-filter-status-chip:has(.done) > button { color: var(--color-success); background: var(--surface-success); }
+@media (min-width: 601px) {
+  .task-list-unified-table {
+    --task-status-column: 128px;
+    --task-name-column: minmax(0, 2fr);
+    --task-tags-column: minmax(0, 1fr);
+    --task-project-column: minmax(0, 1fr);
+    --task-priority-column: 128px;
+    --task-estimate-column: 128px;
+    --task-actual-column: 128px;
+    --task-actions-column: 128px;
+    --task-table-min-width: 0px;
+  }
+  /* Project Tasks retain their eight-column layout, with the same readable minima as Tasks. */
+  .task-list-unified-table.task-list-project-context {
+    --task-name-column: minmax(220px, 2fr);
+    --task-tags-column: minmax(144px, 1fr);
+    --task-table-min-width: 1132px; /* Six 128px columns plus 220px title and 144px tags. */
+  }
+  .unified-shell .task-list-unified-table :is(.task-table-header, .task-table-row) {
+    width: 100%; box-sizing: border-box;
+  }
+  .unified-shell .task-list-v43.task-list-unified-table :is(.task-table-header, .task-table-row) > * {
+    padding-inline: 8px; text-align: left; justify-content: flex-start;
+  }
+  .unified-shell .task-list-unified-table :is(.task-inline-value, .project-picker-trigger, .tag-picker-trigger) {
+    padding-inline: 0; text-align: left; justify-content: flex-start;
+  }
+  .unified-shell .task-list-unified-table .task-row-menu > summary { margin-inline: 0; }
+  .unified-shell .task-list-unified-table :is(.project-picker-trigger, .tag-picker-trigger) { border-width: 0; }
+  .unified-shell .task-list-unified-table .task-table-tags .tag-picker-trigger { width: fit-content; max-width: 100%; }
+  .unified-shell .task-list-unified-table .tag-picker-trigger > .tag-chips { flex: 0 1 auto; width: auto; }
+}
+.task-filter-date-range { display: grid; gap: 8px; }
+.task-filter-date-range input { min-width: 0; width: 100%; }
+/* Page titles share visual rules without changing their actions or content panels. */
+.unified-shell .workspace-page-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-lg);
+  margin: 0 0 var(--section-gap);
+  min-width: 0;
+}
+.unified-shell .workspace-page-heading > div:first-child { min-width: 0; }
+.unified-shell .workspace-page-heading h1 {
+  margin: 0;
+  font-size: var(--font-page);
+  font-weight: var(--weight-emphasis);
+  line-height: 1.3;
+  color: var(--text-primary);
+}
+.unified-shell .workspace-page-heading p {
+  margin: var(--spacing-sm) 0 0;
+  font-size: var(--font-caption);
+  font-weight: var(--weight-body);
+  line-height: var(--line-height-body);
+  color: var(--text-secondary);
+}
+.unified-shell[data-page="reports"] .desktop-page-heading { margin-bottom: 0; }
+@media (max-width: 600px) {
+  .unified-shell .workspace-page-heading { flex-wrap: wrap; gap: var(--spacing-sm); }
+}
+
+/* Split the existing 128px operation Cell; each Trigger owns its half. */
+.unified-shell .task-list-unified-table .task-row-actions { display: flex; align-items: stretch; position: relative; padding-inline: 8px; min-width: 0; }
+.unified-shell .task-list-unified-table .task-row-actions > .task-row-menu { flex: 1; position: relative; padding: 0; }
+.unified-shell .task-list-unified-table .task-row-actions > .task-row-menu > summary { height: 100%; margin: 0; padding: 0; }
+.unified-shell .task-list-unified-table .task-row-actions > .task-timer-always { flex: 1; width: auto; min-width: 0; padding: 8px; align-self: stretch; }
+.task-row-actions .task-timer-always[aria-pressed=true] { color: var(--color-primary); background: var(--surface-hover); }
+@media (max-width: 600px) {
+  .unified-shell .task-list-unified-table .task-row-actions { grid-column: 3; grid-row: 1; }
+}

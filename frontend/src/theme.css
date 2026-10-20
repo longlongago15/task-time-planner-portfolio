@@ -1,0 +1,168 @@
+/* Design-token source of truth. Resets live in index.css; shell geometry in visual-system.css.
+   Timer actions retain their independent palette in timer.css. */
+:root {
+  /* Spacing scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 32px;
+  --space-6: 40px;
+  --space-7: 48px;
+  /* Supplemental type scale */
+  --font-content: 16px;
+  /* Semantic surfaces not overridden by the light/dark palettes below */
+  --on-primary: #fff;
+  --surface-success: #eaf4ef;
+  --surface-warning: #fff3cf;
+  --border-warning: #b58335;
+  --surface-danger: #f8e8e3;
+  --surface-danger-hover: #f2d4ce;
+  --color-info: #245c91;
+  --surface-info: #edf4fb;
+  --color-actual: #d2a34e;
+  --surface-actual: #fff2d8;
+  --brand-highlight: #edb653;
+  /* Shared dimensions, focus and shadows */
+  --radius-small: 6px;
+  --radius-medium: 8px;
+  --radius-large: 12px;
+  --control-height: 40px;
+  --icon-hit-area: 32px;
+  --panel-padding: var(--space-3);
+  --shadow-panel: 0 1px 3px rgb(31 41 55 / 4%);
+  --focus-ring: 2px solid var(--color-primary);
+  /* Legacy aliases retained for existing callers */
+  --text: var(--text-secondary);
+  --text-h: var(--text-primary);
+  --bg: var(--surface-page);
+  --border: var(--border-default);
+  --accent: var(--color-primary);
+  --accent-bg: var(--surface-selected);
+  --accent-border: var(--border-hover);
+  --social-bg: rgba(244, 243, 236, 0.5);
+  --shadow: rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  --heading: var(--sans);
+  --mono: ui-monospace, Consolas, monospace;
+
+  /* Existing shell names share the spacing/radius scales, without renaming callers. */
+  --spacing-xs: var(--space-1);
+  --spacing-sm: var(--space-2);
+  --spacing-md: var(--space-3);
+  --spacing-lg: var(--space-4);
+  --spacing-xl: var(--space-5);
+  --base-radius: var(--radius-medium);
+  --control-small: 32px;
+  --control-medium: var(--control-height);
+  --control-large: 48px;
+
+  /* Editable controls and row hover have distinct roles from generic surface hover. */
+  --surface-editable-hover: #E5E7EB;
+  --field-focus-border: #9CA3AF;
+  --surface-row-hover: #EEF2F6;
+
+  /* General semantic Buttons preserve Indigo without depending on Timer tokens.
+     --color-primary remains the existing Teal accent for navigation/legacy actions. */
+  --button-primary-bg: #4F46E5;
+  --button-primary-hover-bg: #4338CA;
+  --button-primary-text: #FFFFFF;
+  --button-focus-ring: 2px solid #C7D2FE;
+}
+
+/* Semantic palettes are separate from user-owned Project / Tag identification colors. */
+:root, [data-theme="light"] {
+  --color-bg: #F8FAFC;
+  --color-surface: #FFFFFF;
+  --color-surface-muted: #F1F5F9;
+  --color-border: #E2E8F0;
+  --color-text: #0F172A;
+  --color-text-muted: #64748B;
+  --color-accent: #0F766E;
+  --color-accent-hover: #115E59;
+  --color-danger: #B42332;
+  --color-warning: #916000;
+  --color-success: #15803D;
+  --surface-emphasis: #153B39;
+  --text-on-emphasis: #CBD5E1;
+  --surface-selected: #E6F3F1;
+  --border-strong: #CBD5E1;
+  --border-hover: #94A3B8;
+  --grid-major: #CBD5E1;
+  --grid-minor: #F1F5F9;
+  --calendar-project-tint: 14%;
+  --calendar-project-surface: #FFFFFF;
+  --calendar-project-text: #0F172A;
+  --priority-high-text: #B42332;
+  --priority-high-bg: #FDECEE;
+  --priority-medium-text: #916000;
+  --priority-medium-bg: #FFF6D9;
+  --priority-low-text: #1D4ED8;
+  --priority-low-bg: #EAF2FF;
+  color-scheme: light;
+}
+
+/* Foundation only: application does not select dark mode or follow the OS yet. */
+[data-theme="dark"] {
+  --color-bg: #0F172A;
+  --color-surface: #111827;
+  --color-surface-muted: #1E293B;
+  --color-border: #334155;
+  --color-text: #F8FAFC;
+  --color-text-muted: #94A3B8;
+  --color-accent: #5EEAD4;
+  --color-accent-hover: #99F6E4;
+  --color-danger: #FDA4AF;
+  --color-warning: #FCD34D;
+  --color-success: #86EFAC;
+  --surface-emphasis: #111827;
+  --text-on-emphasis: #CBD5E1;
+  --surface-selected: #134E4A;
+  --border-strong: #475569;
+  --border-hover: #64748B;
+  --grid-major: #334155;
+  --grid-minor: #1E293B;
+  --calendar-project-tint: 18%;
+  --calendar-project-surface: #111827;
+  --calendar-project-text: #F8FAFC;
+  --priority-high-text: #FDA4AF;
+  --priority-high-bg: #4C1D2B;
+  --priority-medium-text: #FCD34D;
+  --priority-medium-bg: #422E13;
+  --priority-low-text: #93C5FD;
+  --priority-low-bg: #172554;
+  color-scheme: dark;
+}
+
+:root, [data-theme] {
+  /* Compatibility aliases keep existing components on the same semantic source. */
+  --surface-page: var(--color-bg);
+  --surface-panel: var(--color-surface);
+  --surface-card: var(--color-surface);
+  --surface-subtle: var(--color-surface-muted);
+  --surface-hover: var(--color-surface-muted);
+  --border-default: var(--color-border);
+  --text-primary: var(--color-text);
+  --text-secondary: var(--color-text-muted);
+  --text-muted: var(--color-text-muted);
+  --color-primary: var(--color-accent);
+  --color-primary-hover: var(--color-accent-hover);
+  --color-primary-active: var(--color-accent-hover);
+  --code-bg: var(--color-surface-muted);
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", "Yu Gothic UI", "Yu Gothic", Meiryo, sans-serif;
+  --font-page: 24px;
+  --font-section: 18px;
+  --font-body: 14px;
+  --font-table-header: 13px;
+  --font-caption: 12px;
+  --weight-body: 400;
+  --weight-label: 500;
+  --weight-heading: 600;
+  --weight-emphasis: 700;
+  --line-height-body: 1.5;
+  --line-height-table: 1.4;
+}
+
+.unified-shell button { font-weight: var(--weight-label); }
+.unified-shell h1 { font-size: var(--font-page); font-weight: var(--weight-emphasis); }
+.unified-shell h2 { font-size: var(--font-section); font-weight: var(--weight-heading); }
+.unified-shell :is(.calendar-event.planned, .calendar-schedule-chip, .month-task-chip) { color: var(--calendar-project-text); }

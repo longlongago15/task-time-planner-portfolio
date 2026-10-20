@@ -1,0 +1,130 @@
+/* Shared Task controls. Screen layout and save ownership stay with callers. */
+.app-layout.unified-shell :is(.task-list-standard .task-table-header > span, .shared-full-editor .task-time-summary dt) { color: var(--text-primary); font-size: 14px; font-weight: 700; }
+:is(.task-list-unified-table, .shared-full-editor) .single-select-picker  { display: inline-flex; min-width: 0; }
+.shared-pill  { display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 4px 8px; border-radius: 8px; font-size: 14px; line-height: 20px; white-space: nowrap; font-weight: 600; }
+.shared-pill.status-not_started  { color: var(--text-secondary); background: #F1F5F9; }
+.shared-pill.status-in_progress  { color: var(--priority-low-text); background: var(--priority-low-bg); }
+.shared-pill.status-completed  { color: var(--color-success); background: var(--surface-success); }
+.shared-pill.priority-high  { color: var(--priority-high-text); background: var(--priority-high-bg); }
+.shared-pill.priority-medium  { color: var(--priority-medium-text); background: var(--priority-medium-bg); }
+.shared-pill.priority-low  { color: var(--priority-low-text); background: var(--priority-low-bg); }
+:is(.task-list-unified-table, .shared-full-editor) .shared-pill .ui-icon, :is(.task-list-unified-table, .shared-full-editor) :is(.project-picker-trigger, .shared-picker-option-value) .ui-icon  { width: 16px; height: 16px; }
+.shared-pill.status-in_progress .ui-icon  { fill: currentColor; stroke: none; }
+.app-layout.unified-shell :is(.task-list-unified-table .task-status-trigger, .shared-full-editor :is(.task-status-trigger, .task-priority-pill)):focus-visible .shared-pill  { border: 2px solid var(--field-focus-border); padding: 2px 6px; }
+.app-layout.unified-shell :is(.task-list-unified-table, .shared-full-editor) .shared-picker-popup  { position: fixed; box-sizing: border-box; display: grid; gap: 4px; width: 248px; max-width: calc(100vw - 16px); padding: 8px; border: 1px solid var(--border-default); border-radius: 8px; background: var(--surface-panel); z-index: 110; }
+.app-layout.unified-shell :is(.task-list-unified-table, .shared-full-editor) :is(button, label).shared-picker-option  { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; min-height: 40px; padding: 3px 8px; border: 1px solid transparent; border-radius: 8px; color: var(--text-primary); background: transparent; font-size: 14px; line-height: 20px; cursor: pointer; }
+.app-layout.unified-shell :is(.task-list-unified-table, .shared-full-editor) :is(button, label).shared-picker-option:is(:hover, :focus-visible, [aria-checked=true])  { background: var(--surface-editable-hover); border-color: var(--field-focus-border); outline: none; box-shadow: none; }
+.single-select-picker > .shared-picker-popup { max-height: calc(100dvh - 16px); overflow-y: auto; }
+.task-list-unified-table :is(.task-deadline-editor, .task-row-menu[open], .task-row-menu .task-table-actions) { z-index: 110; }
+.shared-picker-option-value  { display: inline-flex; align-items: center; gap: 8px; min-width: 0; }
+:is(.task-list-unified-table, .shared-full-editor) .shared-picker-option .shared-pill  { padding: 0; background: transparent; }
+.shared-picker-check  { margin-left: auto; color: var(--text-secondary); }
+:is(.task-list-unified-table, .shared-full-editor) label.shared-picker-option  { justify-content: flex-start; }
+:is(.task-list-unified-table, .shared-full-editor) .shared-pill  { width: 80px; height: 32px; box-sizing: border-box; flex: none; justify-content: flex-start; gap: 6px; }
+:is(.task-list-unified-table, .shared-full-editor) :is(.task-status-trigger, .task-priority-pill) .shared-pill  { position: relative; z-index: 1; }
+:is(.task-list-unified-table, .shared-full-editor) :is(.task-status-trigger, .task-priority-pill) .shared-pill:hover  { background: color-mix(in srgb, currentColor 12%, white); }
+:is(.task-list-unified-table, .shared-full-editor) .shared-pill.priority-high .ui-icon,
+:is(.task-list-unified-table, .shared-full-editor) .shared-pill.priority-medium .ui-icon,
+:is(.task-list-unified-table, .shared-full-editor) .shared-pill.priority-low .ui-icon  { fill: currentColor; }
+:is(.task-list-unified-table, .shared-full-editor) .shared-pill.status-completed .ui-icon  { border-radius: 50%; background: currentColor; }
+:is(.task-list-unified-table, .shared-full-editor) .shared-pill.status-completed .ui-icon path  { stroke: white; }
+.app-layout.unified-shell :is(.task-list-standard, .shared-full-editor) :is(.task-table-tags, .shared-picker-popup, .task-tag-field) .tag-chip:not(.tag-overflow)  {
+  height: 28px; min-height: 28px; box-sizing: border-box; display: inline-flex; align-items: center;
+  border: none; border-radius: 8px; padding: 0 10px; font-size: 13px; font-weight: 600; line-height: 1; letter-spacing: 0;
+}
+:is(.task-list-standard, .shared-full-editor) .tag-picker-trigger .tag-chip:not(.tag-overflow)  { position: relative; z-index: 1; }
+.app-layout.unified-shell :is(.task-list-standard, .shared-full-editor) .tag-picker-options label.shared-picker-option  { justify-content: flex-start; gap: 8px; }
+.app-layout.unified-shell :is(.task-list-standard, .shared-full-editor) .tag-picker-options label.shared-picker-option > .tag-chip  { flex: 0 1 auto; width: auto; margin: 0; }
+.app-layout.unified-shell :is(.task-list-standard, .shared-full-editor) .tag-picker-options input[type=checkbox]  {
+  appearance: none; position: relative; width: 16px; height: 16px; min-height: 16px; padding: 0; margin: 0;
+  border: 1px solid var(--field-focus-border); border-radius: 4px; background: white; flex: none; cursor: pointer;
+}
+.app-layout.unified-shell :is(.task-list-standard, .shared-full-editor) .tag-picker-options input[type=checkbox]:checked  { background: var(--color-primary, #4F46E5); border-color: var(--color-primary, #4F46E5); }
+:is(.task-list-standard, .shared-full-editor) .tag-picker-options input[type=checkbox]:checked::after  { content: ''; position: absolute; left: 4px; top: 1px; width: 4px; height: 8px; border: solid white; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+:is(.task-list-standard, .shared-full-editor) .tag-picker-options input[type=checkbox]:focus-visible  { outline: 2px solid var(--field-focus-border); outline-offset: 2px; }
+.app-layout.unified-shell :is(.task-list-standard, .shared-full-editor) .tag-picker-trigger .tag-chip:not(.tag-overflow):hover  { background: color-mix(in srgb, currentColor 30%, white) !important; filter: none; border: none; }
+/* Shared Full Editor presentation; input/save ownership remains with callers. */
+.app-layout.unified-shell .shared-full-editor :is(.task-name-section > input, .task-attribute-control > input, .date-input input, .time-input input, .task-time-estimate-editor > input) {
+  box-sizing: border-box; width: 100%; min-width: 0; height: 40px; min-height: 40px; padding: 8px;
+  font-size: 14px; line-height: 20px; border: 2px solid transparent; border-radius: 8px;
+  background: white; outline: none; box-shadow: none;
+}
+.app-layout.unified-shell .shared-full-editor :is(.task-name-section > input, .task-attribute-control > input, .date-input input, .time-input input, .task-time-estimate-editor > input):hover:not(:disabled) { background: var(--surface-editable-hover); }
+.app-layout.unified-shell .shared-full-editor :is(.task-name-section > input, .task-attribute-control > input, .date-input input, .time-input input, .task-time-estimate-editor > input):is(:focus, :focus-visible) { border-color: var(--field-focus-border); outline: none; box-shadow: none; }
+/* The existing attribute control column owns one full-width editable surface. */
+.shared-full-editor { --task-cell-hover: var(--surface-editable-hover); --editor-field-padding: var(--space-2); }
+.shared-full-editor .task-attribute-control { width: 100%; min-width: 0; border-radius: 8px; background: white; }
+.shared-full-editor .task-attribute-control:hover:not(:has(:disabled)):not(:has(.shared-pill:not(.priority-none):hover, .tag-chip:hover)) { background: var(--task-cell-hover); }
+.shared-full-editor .time-input { display: block; width: 100%; min-width: 0; }
+.app-layout.unified-shell .shared-full-editor .task-attribute-control :is(.single-select-picker, .project-picker, .tag-picker) { display: block; width: 100%; min-width: 0; }
+.app-layout.unified-shell .shared-full-editor .task-attribute-control :is(.task-status-trigger, .task-priority-pill, .project-picker-trigger, .tag-picker-trigger) {
+  display: flex; align-items: center; justify-content: flex-start; box-sizing: border-box;
+  width: 100%; min-width: 0; min-height: 40px; padding: 2px calc(var(--editor-field-padding) - 2px); gap: 8px;
+  border: 2px solid transparent; border-radius: 8px; background: transparent; outline: none; box-shadow: none;
+}
+.app-layout.unified-shell .shared-full-editor .task-attribute-control :is(.task-status-trigger, .task-priority-pill, .project-picker-trigger, .tag-picker-trigger):hover { background: transparent; }
+.app-layout.unified-shell .shared-full-editor :is(.task-status-trigger, .task-priority-pill) > .shared-pill { flex: none; width: 80px; height: 32px; }
+.app-layout.unified-shell .shared-full-editor .task-attribute-control :is(input:not([type=hidden]):not([type=checkbox]), .date-input input, .time-input input, .deadline-calendar-trigger) { background: inherit; }
+.app-layout.unified-shell .shared-full-editor .task-attribute-control :is(input:not([type=hidden]):not([type=checkbox]), .date-input input, .time-input input, .deadline-calendar-trigger):hover:not(:disabled) { background: inherit; }
+.shared-full-editor .deadline-input-controls { gap: 0; border-radius: 8px; background: inherit; }
+.shared-full-editor .task-attribute-control :is(.date-input, .time-input) { background: inherit; }
+.app-layout.unified-shell .shared-full-editor .task-attribute-control :is(.project-picker-trigger, .tag-picker-trigger):focus-visible { border-color: var(--field-focus-border); outline: none; box-shadow: none; }
+.shared-full-editor .task-tag-field .tag-chips { flex-wrap: wrap; overflow: visible; }
+.app-layout.unified-shell .shared-full-editor .tag-picker-trigger > .ui-icon { display: none; }
+.app-layout.unified-shell .shared-full-editor :is(.task-status-trigger, .task-priority-pill):focus-visible .shared-pill { border: 2px solid var(--field-focus-border); padding: 2px 6px; }
+.shared-pill.priority-none { color: var(--text-secondary); }
+.app-layout.unified-shell .shared-full-editor .task-priority-pill > .shared-pill.priority-none { background: transparent; }
+.app-layout.unified-shell .shared-full-editor .task-attribute-control :is(input:not([type=hidden]):not([type=checkbox])) { padding-inline: calc(var(--editor-field-padding) - 2px); }
+.app-layout.unified-shell .shared-full-editor .task-attribute-row[data-unset=true] :is(.unset-value, .tag-empty, .shared-pill.priority-none, input:not([type=hidden])) { color: var(--text-secondary); font-weight: 400; opacity: 1; }
+.app-layout.unified-shell .shared-full-editor .task-attribute-row input::placeholder { color: var(--text-secondary); font-weight: 400; opacity: 1; }
+.app-layout.unified-shell .shared-full-editor .task-priority-pill > .shared-pill.priority-none { padding: 0; }
+.shared-full-editor .project-picker-trigger:has(.unset-value) > .ui-icon { display: none; }
+.app-layout.unified-shell .shared-full-editor .task-status-trigger .shared-pill.status-not_started { background: transparent; color: var(--text-secondary); }
+.shared-full-editor .task-priority-field > .task-attribute-icon .ui-icon { fill: currentColor; }
+.app-layout.unified-shell .shared-full-editor .deadline-calendar-trigger,
+.app-layout.unified-shell .shared-full-editor .icon-close { width: 40px; min-width: 40px; height: 40px; padding: 8px; border-radius: 8px; }
+.app-layout.unified-shell .shared-full-editor .deadline-calendar-trigger { background: inherit; color: var(--text-secondary); border: 2px solid transparent; }
+.app-layout.unified-shell .shared-full-editor .deadline-calendar-trigger:hover:not(:disabled) { background: inherit; }
+.app-layout.unified-shell .shared-full-editor .deadline-calendar-trigger:focus-visible,
+.app-layout.unified-shell .shared-full-editor .icon-close:focus-visible { outline: none; border: 2px solid var(--field-focus-border); box-shadow: none; }
+
+/* Reusable semantic Buttons; callers retain all action and pending handlers. */
+.app-layout.unified-shell button.ui-button { display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; height: 40px; min-height: 40px; padding: 8px 16px; border: 0; border-radius: 8px; font-size: 14px; font-weight: 600; color: var(--button-text); background: var(--button-bg); }
+.app-layout.unified-shell button.ui-button-primary { --button-text: var(--button-primary-text); --button-bg: var(--button-primary-bg); --button-hover-bg: var(--button-primary-hover-bg); --button-hover-text: var(--button-primary-text); --button-active-bg: var(--button-primary-hover-bg); --button-active-text: var(--button-primary-text); }
+.app-layout.unified-shell button.ui-button-secondary { --button-text: var(--text-secondary); --button-bg: var(--surface-subtle); --button-hover-bg: var(--surface-hover); --button-hover-text: var(--text-primary); }
+.app-layout.unified-shell button.ui-button-danger { --button-text: var(--color-danger); --button-bg: var(--surface-danger); --button-hover-bg: var(--surface-danger-hover); --button-hover-text: var(--color-danger); }
+.app-layout.unified-shell button.ui-button:hover:not(:disabled) { color: var(--button-hover-text); background: var(--button-hover-bg); }
+.app-layout.unified-shell button.ui-button:focus-visible { outline: var(--button-focus-ring); outline-offset: 2px; box-shadow: none; }
+.app-layout.unified-shell button.ui-button:disabled { color: var(--text-muted); background: var(--surface-hover); opacity: 1; cursor: default; }
+.shared-full-editor .composer-footer { gap: 8px; padding-block: 16px; margin-top: 16px; }
+.home-full-editor .task-time-summary { gap: 8px; margin-block: 8px; }
+.app-layout.unified-shell .home-full-editor .task-time-summary dd :is(button, strong) { text-align: center; justify-content: center; align-items: center; }
+.home-full-editor .task-time-estimate-editor { display: block; height: 100%; }
+.app-layout.unified-shell .home-full-editor .task-time-estimate-editor > button { display: flex; width: 100%; min-height: 40px; height: 100%; padding: 8px; border: 0; border-radius: 8px; background: var(--surface-subtle); }
+/* Compact variants only affect Home Editor history; other log surfaces retain their layout. */
+.home-full-editor .task-editor-records .time-entry-log-compact { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; padding-block: 8px; }
+.home-full-editor .task-editor-records .time-entry-log-compact > td::before { content: none; }
+.home-full-editor .task-editor-records .time-entry-log-compact > td[data-label="日付"] { grid-area: 1 / 1 / 2 / 3; }
+.home-full-editor .task-editor-records .time-entry-log-compact > td[data-label="計測期間"] { grid-area: 1 / 3 / 2 / 6; }
+.home-full-editor .task-editor-records .time-entry-log-compact > td[data-label="記録"] { grid-area: 1 / 6 / 2 / 7; }
+.home-full-editor .task-editor-records .time-entry-log-compact > td[data-label="プロジェクト名"] { grid-area: 2 / 1 / 3 / 4; }
+.home-full-editor .task-editor-records .time-entry-log-compact > td[data-label="タグ"] { grid-area: 2 / 4 / 3 / 7; }
+.home-full-editor .task-editor-records .time-entry-log-compact > td[data-label="操作"] { grid-area: 3 / 1 / 4 / -1; justify-self: end; }
+.home-full-editor .task-editor-records .time-entry-log-compact .entry-inline-value { font-size: 12px; line-height: 20px; }
+.home-full-editor .task-editor-records .time-entry-log-compact .entry-display-date { font-size: 12px; align-self: stretch; display: flex; align-items: center; }
+.home-full-editor .task-editor-placements .task-editor-schedule-compact { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) minmax(48px, .6fr); gap: 8px; padding-block: 8px; }
+.home-full-editor .task-editor-schedule-compact > :is(button, p, .calendar-inline-schedule-actions) { grid-column: 1 / -1; }
+.home-full-editor .task-editor-schedule-compact > button { justify-self: end; }
+.app-layout.unified-shell .home-full-editor .task-editor-schedule-compact .task-inline-value { font-size: 12px; line-height: 20px; }
+.home-full-editor .entry-compact-dates { display: grid; gap: 8px; width: 100%; min-width: 0; }
+.home-full-editor .entry-compact-times { display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); align-items: center; gap: 8px; }
+.home-full-editor .entry-compact-times > span { display: contents; }
+.home-full-editor .entry-editor-actions, .home-full-editor .calendar-inline-schedule-actions { display: flex; justify-content: flex-end; gap: 8px; }
+.home-full-editor .time-entry-log-compact > td[data-label="操作"] { display: flex; align-items: center; gap: 8px; }
+.app-layout.unified-shell .home-full-editor .task-time-section :is(.compact-input input, .task-editor-schedule-compact input, .task-time-estimate-editor input) { box-sizing: border-box; width: 100%; min-width: 0; height: 32px; min-height: 32px; padding: 4px; border: 2px solid transparent; border-radius: 8px; background: white; color: var(--text-primary); font-size: 12px; line-height: 20px; }
+.app-layout.unified-shell .home-full-editor .task-time-section :is(.compact-input input, .task-editor-schedule-compact input, .task-time-estimate-editor input):hover { background: var(--task-cell-hover); }
+.app-layout.unified-shell .home-full-editor .task-time-section :is(.compact-input input, .task-editor-schedule-compact input, .task-time-estimate-editor input):is(:focus,:focus-visible) { border-color: var(--field-focus-border); outline: none; box-shadow: none; }
+.app-layout.unified-shell .home-full-editor .compact-input .deadline-calendar-trigger { width: 24px; min-width: 24px; height: 32px; min-height: 32px; padding: 0; border: 0; }
+.home-full-editor .compact-input .deadline-calendar { position: fixed; z-index: 130; width: 280px; max-width: calc(100vw - 16px); box-sizing: border-box; }
+.home-full-editor .compact-input { display: block; min-width: 0; width: 100%; }
+.home-full-editor .task-editor-schedule-compact .task-editor-schedule-times { gap: 8px; }

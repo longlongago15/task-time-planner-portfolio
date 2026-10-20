@@ -1,0 +1,146 @@
+import assert from 'node:assert/strict'
+import test from 'node:test'
+import { openBrowser } from './browser.mjs'
+import { selectReportAnchor, selectReportRange } from './report-picker.mjs'
+
+test('Reports four Modes use single dates or explicit ranges without changing Home (API mocks, no DB)', { timeout: 120000 }, async t => {
+  const browser = await openBrowser()
+  t.after(() => browser.close())
+  const requests = [], errors = []
+  await browser.send('Emulation.setTimezoneOverride', { timezoneId: 'Asia/Tokyo' })
+  await browser.send('Emulation.setDeviceMetricsOverride', { width: 1920, height: 1080, deviceScaleFactor: 1, mobile: false })
+  await browser.send('Page.addScriptToEvaluateOnNewDocument', { source: `(()=>{const D=Date,now=${Date.parse('2026-10-07T12:00:00+09:00')};window.Date=class extends D{constructor(...a){super(...(a.length?a:[now]))}static now(){return now}}})()` })
+  browser.listeners.push(message => {
+    if (message.method === 'Runtime.exceptionThrown') errors.push(message.params.exceptionDetails)
+    if (message.method !== 'Fetch.requestPaused') return
+    const { request, requestId } = message.params, path = new URL(request.url).pathname
+    void (async () => {
+      if (request.method === 'OPTIONS') return browser.fulfill(requestId, {})
+      requests.push({ method: request.method, path })
+      let data = []
+      if (path === '/tasks/time/active') data = { taskId: null, running: false, startedAt: null }
+      else if (path === '/reports/daily') data = { date: '2026-10-07', plannedOccupiedMinutes: 0, dailyActualMinutes: 0, dailyEstimatedMinutes: 0, tasks: [] }
+      await browser.fulfill(requestId, data)
+    })().catch(error => errors.push(String(error)))
+  })
+  await browser.send('Fetch.enable', { patterns: [{ urlPattern: 'http://localhost:8000/*', requestStage: 'Request' }] })
+  await browser.navigate()
+  await browser.evaluate('window.location.search="?reportDemo=1"')
+  await browser.until('!!document.querySelector(".icon-rail [aria-label=レポート]")', 'Navigation')
+  await browser.click('.icon-rail [aria-label="レポート"]')
+  const ready = () => browser.until('!!document.querySelector("[data-report-demo]") && !!document.querySelector(".report-summary") && document.querySelector(".reports-v2").getAttribute("aria-busy")==="false"', 'Demo Report ready')
+  await ready()
+  const mode = async name => {
+    await browser.evaluate(`Array.from(document.querySelectorAll('.report-mode button')).find(e=>e.textContent===${JSON.stringify(name)}).click()`)
+    await browser.until(`document.querySelector('.report-mode [aria-pressed=true]')?.textContent===${JSON.stringify(name)}`, 'Mode committed')
+    await ready()
+  }
+  const label = () => browser.evaluate('document.querySelector(".report-period-label").textContent')
+  const values = () => browser.evaluate('Array.from(document.querySelectorAll(".report-summary strong")).map(e=>e.textContent)')
+  const open = async () => { await browser.click('.report-period-label'); await browser.until('!!document.querySelector(".calendar-navigation-picker")', 'Picker') }
+  const close = async () => { await browser.click('.calendar-navigation-picker [aria-label="カレンダーピッカーを閉じる"]'); await browser.until('!document.querySelector(".calendar-navigation-picker")', 'Picker closed') }
+  const style = date => browser.evaluate(`(()=>{const e=document.querySelector('.calendar-navigation-picker button[data-picker-date="${date}"]'),s=getComputedStyle(e);return {background:s.backgroundColor,color:s.color,shadow:s.boxShadow,edge:e.hasAttribute('data-range-edge'),pressed:e.getAttribute('aria-pressed'),week:e.classList.contains('week-selected')}})()`)
+  const header = await browser.evaluate('(()=>{const r=document.querySelector(".app-header").getBoundingClientRect();return [r.x,r.y,r.width,r.height]})()')
+
+  await t.test('Four Modes exist; Day selects one date and closes immediately', async () => {
+    assert.deepEqual(await browser.evaluate('Array.from(document.querySelectorAll(".report-mode button")).map(e=>e.textContent)'), ['日', '週', '月', '期間'])
+    await open()
+    assert.equal(await browser.evaluate('!!document.querySelector(".calendar-picker-range-hint")'), false)
+    await browser.click('.calendar-navigation-picker button[data-picker-date="2026-10-07"]')
+    await browser.until('!document.querySelector(".calendar-navigation-picker")', 'Single Day closes')
+    assert.equal(await label(), '2026/10/07(水)')
+  })
+  await t.test('Week selects one anchor date and highlights its Monday to Sunday only', async () => {
+    await mode('週'); await selectReportAnchor(browser, '2026-10-07')
+    assert.equal(await label(), '10/5 - 10/11')
+    assert.deepEqual(await values(), ['25時間', '25時間30分', '+30分'])
+    await open()
+    assert.equal(await browser.evaluate('!!document.querySelector(".calendar-picker-range-hint")'), false)
+    assert.equal(await browser.evaluate('document.querySelectorAll(".week-selected").length'), 7)
+    assert.equal(await browser.evaluate('document.querySelectorAll("[data-range-edge]").length'), 0)
+    assert.equal((await style('2026-10-07')).pressed, 'true')
+    assert.equal((await style('2026-10-05')).pressed, 'false')
+    await browser.click('.calendar-navigation-picker button[data-picker-date="2026-10-14"]')
+    await browser.until('!document.querySelector(".calendar-navigation-picker")', 'Single Week date closes')
+    assert.equal(await label(), '10/12 - 10/18')
+  })
+  await t.test('Month uses a single day Calendar, not Range or Month Grid', async () => {
+    await mode('月'); await selectReportAnchor(browser, '2026-10-07')
+    assert.equal(await label(), '2026年10月')
+    await open()
+    assert.equal(await browser.evaluate('!!document.querySelector(".calendar-picker-range-hint") || !!document.querySelector(".calendar-picker-months")'), false)
+    assert.equal(await browser.evaluate('document.querySelectorAll(".date-selected").length'), 1)
+    await browser.click('.calendar-navigation-picker [aria-label="次月"]')
+    await browser.until('document.querySelector("#calendar-navigation-picker-title")?.textContent==="2026年11月"', 'November')
+    await browser.click('.calendar-navigation-picker button[data-picker-date="2026-11-04"]')
+    await browser.until('!document.querySelector(".calendar-navigation-picker")', 'Single Month date closes')
+    assert.equal(await label(), '2026年11月')
+  })
+  await t.test('Period alone selects two dates; endpoints, inner range and Today are distinct', async () => {
+    await mode('週'); await selectReportAnchor(browser, '2026-10-07')
+    await selectReportRange(browser, '2026-10-09', '2026-10-11')
+    await open()
+    const start = await style('2026-10-09'), end = await style('2026-10-11'), inside = await style('2026-10-10'), today = await style('2026-10-07')
+    assert(start.edge && end.edge && !inside.edge && !today.edge)
+    assert.equal(start.background, end.background)
+    assert.equal(start.color, 'rgb(255, 255, 255)')
+    assert.notEqual(start.background, inside.background)
+    assert.equal(today.background, 'rgba(0, 0, 0, 0)')
+    assert.notEqual(today.shadow, 'none')
+    await close()
+    // Reversed endpoints normalize safely using the existing two-click helper.
+    await selectReportRange(browser, '2026-10-11', '2026-10-05')
+    assert.equal(await label(), '10/5 - 10/11')
+    await open()
+    assert.equal(await browser.evaluate('document.querySelectorAll(".range-selected").length'), 7)
+    assert.equal((await style('2026-10-07')).edge, false)
+    assert.notEqual((await style('2026-10-07')).shadow, 'none')
+    await close()
+    await selectReportRange(browser, '2026-10-07', '2026-10-07')
+    await open()
+    const todayEdge = await style('2026-10-07')
+    assert(todayEdge.edge); assert.equal(todayEdge.color, 'rgb(255, 255, 255)'); assert.notEqual(todayEdge.shadow, 'none')
+    await close()
+  })
+  await t.test('Range arrows reuse same-length shifts; clear restores previous Mode/date rather than Today', async () => {
+    await selectReportRange(browser, '2026-10-03', '2026-10-17')
+    await browser.click('.report-period-controls [aria-label="次の期間"]'); await ready()
+    assert.equal(await label(), '10/18 - 11/1')
+    await browser.click('.report-period-controls [aria-label="前の期間"]'); await ready()
+    assert.equal(await label(), '10/3 - 10/17')
+    await browser.click('.report-period-controls .secondary-button'); await ready()
+    assert.equal(await browser.evaluate('document.querySelector(".report-mode [aria-pressed=true]").textContent'), '週')
+    assert.equal(await label(), '10/5 - 10/11')
+    await open(); assert.equal((await style('2026-10-07')).pressed, 'true'); await close()
+    await mode('日'); await selectReportAnchor(browser, '2026-10-02')
+    await selectReportRange(browser, '2026-10-09', '2026-10-10')
+    await browser.click('.report-period-controls .secondary-button'); await ready()
+    assert.equal(await label(), '2026/10/02(金)')
+    for (const [name, text] of [['日', '今日'], ['週', '今週'], ['月', '今月']]) {
+      await mode(name)
+      assert.equal(await browser.evaluate('document.querySelector(".report-period-controls .secondary-button").textContent'), text)
+      await browser.click('.report-period-controls .secondary-button'); await ready()
+      assert.equal(await label(), name === '日' ? '2026/10/07(水)' : name === '週' ? '10/5 - 10/11' : '2026年10月')
+    }
+  })
+  await t.test('Global Header, Popover focus/viewport and Home Week Picker remain unchanged', async () => {
+    assert.deepEqual(await browser.evaluate('(()=>{const r=document.querySelector(".app-header").getBoundingClientRect();return [r.x,r.y,r.width,r.height]})()'), header)
+    await open(); await browser.send('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Escape', code: 'Escape', windowsVirtualKeyCode: 27 })
+    await browser.until('!document.querySelector(".calendar-navigation-picker")', 'Escape')
+    assert(await browser.evaluate('document.activeElement===document.querySelector(".report-period-label")'))
+    await browser.send('Emulation.setDeviceMetricsOverride', { width: 375, height: 812, deviceScaleFactor: 1, mobile: false })
+    await open()
+    assert(await browser.evaluate('(()=>{const r=document.querySelector(".calendar-navigation-picker").getBoundingClientRect();return r.left>=0 && r.right<=innerWidth && r.bottom<=innerHeight})()'))
+    await close()
+    await browser.send('Emulation.setDeviceMetricsOverride', { width: 1920, height: 1080, deviceScaleFactor: 1, mobile: false })
+    await browser.click('.icon-rail [aria-label="ホーム"]')
+    await browser.until('!!document.querySelector(".calendar-period-label")', 'Home')
+    await browser.click('.calendar-period-label')
+    await browser.until('!!document.querySelector(".calendar-picker-weeks")', 'Home Week Picker')
+    assert.equal(await browser.evaluate('!!document.querySelector(".calendar-picker-range-days")'), false)
+    await browser.click('.calendar-picker-weeks [data-picker-week="2026-10-05"]')
+    await browser.until('!document.querySelector(".calendar-navigation-picker")', 'Home selects one Week')
+    assert.deepEqual(errors, [])
+    assert.equal(requests.filter(r => r.method !== 'GET').length, 0)
+  })
+})

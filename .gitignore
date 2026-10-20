@@ -1,0 +1,54 @@
+# Private configuration, local SQLite data, test databases and backups
+.env
+.env.*
+!.env.example
+.local-data/
+*.db
+*.db-*
+*.db.*
+*.sqlite*
+*.backup
+*.bak
+*.dump
+*.key
+*.pem
+*.p12
+*.pfx
+id_rsa
+id_ed25519
+.npmrc
+.pypirc
+Cookies
+Login Data
+History
+Local State
+.mysql-local/
+.mysql-operation-output/
+# Environments, caches, build output and operation logs
+.venv*/
+venv/
+node_modules/
+dist/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.test-tmp/
+.npm-cache/
+.pip-cache/
+.browser-profiles/
+*.log
+*.tsbuildinfo
+coverage/
+htmlcov/
+.coverage*
+# Browser acceptance-test artifacts; curated public images live at screenshots root
+/docs/screenshots/*/
+/docs/*browser-requests.json
+/docs/*.json
+/docs/audits/
+/docs/backups/
+frontend/build-output.txt
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
